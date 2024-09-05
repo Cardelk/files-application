@@ -1,0 +1,1961 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQF Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h3 {
+            margin-bottom: 10px;
+        }
+        button, input[type="text"], input[type="checkbox"] {
+            display: block;
+            margin: 5px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .question-summary {
+            margin-bottom: 10px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        #progress {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .selected-answer {
+            background-color: #d3d3d3;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="question"></div>
+    <div id="progress"></div>
+    <div class="navigation-buttons">
+        <button id="prevBtn" onclick="navigate(-1)">Previous</button>
+        <button id="nextBtn" onclick="navigate(1)">Next</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        const questions = [
+           
+            {
+                type: "fill-in-the-blank",
+                question: "1 What are the five requirements for achieving accurate first-round fire for effect?",
+                answer: "Accurate Target Location and Size. Accurate Firing Unit Location. Accurate Weapon and Ammunition Information. Accurate Meterological Information. Accurate Computational Procedures."
+            },
+            {
+                type: "multiple-choice",
+                question: "2 As an observer, which of the five requirements for achieving accurate first-round fire for effect are you solely responsible for?",
+                options: ["Accurate Firing Unit Location", "Accurate Target Location and Size", "Accurate Computational Procedures", "Accurate Meteorological Information"],
+                answer: "Accurate Target Location and Size"
+            },
+            {
+                type: "multiple-choice",
+                question: "3 The observer serves as the “eyes” of the indirect fire systems and the FDC serves as the “brain” of the system.",
+                options: ["True", "False",],
+                answer: "True"
+            },
+{
+                type: "multiple-choice",
+                question: "4 What and its elements integrate the fires warfighting function into operations?",
+                options: ["Joint Effects Cell","Fire Direction Center","Fire Support Element","Fires Cell",],
+                answer: "Fires Cell"
+            },
+{
+                type: "multiple-choice",
+                question: "5 What asset provides the commander flexibility, range, speed, lethality, precision, and the ability to mass fires at a desired time and place?",
+                options: ["Unmanned Aircraft","Mortars","Fixed Wing Aircraft","Army Attack Aviation",],
+                answer: "Fixed Wing Aircraft"
+            },
+{
+                type: "multiple-choice",
+                question: "6 _____ is executed in support of friendly forces in close enemy contact (i.e., close combat attack) or against enemy forces out of contact with friendly forces.",
+                options: ["Close Combat Attack","Army Attack Aviation","Close Air Support","Joint Fire Power",],
+                answer: "Army Attack Aviation"
+            },
+{
+                type: "multiple-choice",
+                question: "7 Which branch of service employs it’s attack rotary wing aviation primarily as a CAS platform?",
+                options: ["Army","Navy","Air Force","Marine Corps",],
+                answer: "Marine Corps"
+            },
+{
+                type: "multiple-choice",
+                question: "8 Army Attack Aviation can perform CAS in support of another component.",
+                options: ["True", "False",],
+                answer: "True"
+            },
+{
+                type: "multiple-choice",
+                question: "9 _____ can support or conduct close combat attack, CAS, strike coordination and reconnaissance, AI, and other joint fires missions.",
+                options: ["Army Attack Helicopters","Joint Fires Observer","Joint Combat Attack","Unmanned Aircraft",],
+                answer: "Unmanned Aircraft"
+            },
+{
+                type: "multiple-choice",
+                question: "10 _____ normally produces the specific effect on a target with the minimum expenditure of ammunition. It also reduces our vulnerability to adversary target acquisition.",
+                options: ["Fires Planning","Target Synchronization","Targeted Effects","Massing Fires",],
+                answer: "Massing Fires"
+            },
+{
+                type: "multiple-choice",
+                question: "11 Failure to select proper shell fuze combinations may result in what?",
+                options: ["Undesired Effects on Target","Reduction in Desired Effects on Target","Excessive Expenditure of Ammunition","All of the Above",],
+                answer: "All of the Above"
+            },
+{
+                type: "multiple-choice",
+                question: "12 Aside from tactical considerations, the selection of targets, munitions, and techniques of fire must comply with what?",
+                options: ["Law of War","Geneva and Hague Conventions","Both A and B","None of the Above",],
+                answer: "Both A and B"
+            },
+{
+                type: "fill-in-the-blank",
+                question: "13 Observers equipped with nothing more than a map, binoculars, and compass typically have a mean target location error of about how many meters?",
+                answer: "250"
+            },
+{
+                type: "multiple-choice",
+                question: "14 Who is in charge of the FIST and also the principal fire support advisor to the commander when attached to or supporting a company or troop?",
+                options: ["Company/Troop FSO"," Battalion/Squadron FSO","Company/Troop FSNCO"," Battalion/Squadron FSNCO",],
+                answer: "Company/Troop FSO"
+            },
+            {
+                type: "multiple-choice",
+                question: "15 The _____ has the responsibility to integrate fire support with the scheme of maneuver and provides the commander’s intent for an operation and issues guidance, including guidance for fire support. The _____ translates the guidance into fire support tasks.",
+                options: ["Maneuver Commander / FSO","Brigade FSO / Battalion FSO","Brigade Commander / Brigade FSO","DIVARTY Commander / FIST",],
+                answer: "Maneuver Commander / FSO"
+            },
+{
+                type: "select-multiple",
+                question: "16 Select all that apply: What is a Target?",
+                options: ["An entity or object that performs a function for the adversary considered for possible engagement or other action.","A country, area, installation, agency, or person against which intelligence operations are directed.","An area designated and numbered for future firing.","An impact burst that hits the target."],
+                answer: ["An entity or object that performs a function for the adversary considered for possible engagement or other action.","A country, area, installation, agency, or person against which intelligence operations are directed.","An area designated and numbered for future firing.","An impact burst that hits the target."]
+            },
+{
+                type: "multiple-choice",
+                question: "17 What is a target that is identified too late, or not selected for action in time, to be included in deliberate targeting that, when detected or located, meets criteria specific to achieving objectives and is processed using dynamic targeting?",
+                options: ["Target","Time Sensitive Target","Target of Opportunity","Unplanned Target",],
+                answer: "Target of Opportunity"
+            },
+{
+                type: "multiple-choice",
+                question: "18 A _____ is a target that is known to exist in the operational environment, upon which actions are planned, using deliberate targeting, creating effects which support commander’s objectives.",
+                options: ["Established Target","Approved Target","Priority Target","Planned Target",],
+                answer: "Planned Target"
+            },
+{
+                type: "multiple-choice",
+                question: "19 A _____ is a planned target upon which fires or other actions are scheduled for prosecution at a specified time.",
+                options: ["Scheduled Target","Specified Target","Time Sensitive Target","Priority Target",],
+                answer: "Scheduled Target"
+            },
+{
+                type: "multiple-choice",
+                question: "20 A _____ is a planned target upon which fires or other actions are determined using deliberate targeting and triggered, when detected or located, using dynamic targeting.",
+                options: ["Scheduled Target","On-call Target","Deliberate Target","Dynamic Target",],
+                answer: "On-call Target"
+            },
+{
+                type: "multiple-choice",
+                question: "21 A _____ is a target, based on either time or importance, on which the delivery of fires takes precedence over all the fires for the designated firing unit or element.",
+                options: ["Priority Target","Immediate Suppression","Final Protective Fire","On-call Targe",],
+                answer: "Priority Target"
+            },
+{
+                type: "fill-in-the-blank",
+                question: "22 What is an immediately available prearranged barrier of fire designed to impede enemy movement across defensive lines or areas?",
+                answer: "FPF"
+            },
+{
+                type: "multiple-choice",
+                question: "23 When planning an FPF, what is the approximate length and width in meters for an FPF fired with 4 tubes of 120mm Mortars?",
+                options: ["150 / 50","300 / 50","280 / 75","300 / 75",],
+                answer: "300 / 75"
+            },
+{
+                type: "multiple-choice",
+                question: "24 When planning an FPF, what is the approximate length and width in meters for an FPF fired with 8 guns of 155mm Howitzers?",
+                options: ["400 / 50","350 / 75","210 / 35","400 / 75",],
+                answer: "400 / 50"
+            },
+{
+                type: "multiple-choice",
+                question: "25 What is the DA form used for the Target List Worksheet?",
+                options: ["DA Form 4856","DA Form 4187","DA Form 4655","DA Form 5429",],
+                answer: "DA Form 4655"
+            },
+{
+                type: "multiple-choice",
+                question: "31 A _____ consists of two or more targets on which fire is desired simultaneously.",
+                options: ["Collective Target Set","Series of Targets","Multiple Targets","Group of Targets",],
+                answer: "Group of Targets"
+            },
+{
+                type: "multiple-choice",
+                question: "32 A _____ is a number of targets and/or group(s) of targets planned to be fired in a predetermined sequence to support a maneuver operation.",
+                options: ["Sequential Targets","Series of Targets","Collective Target Set","Program of Targets",],
+                answer: "Series of Targets"
+            },
+{
+                type: "multiple-choice",
+                question: "33 A _____ consists of a number of planned targets of a similar nature that are planned for sequential attack.",
+                options: ["Sequential Targets","Series of Targets","Group of Targets","Program of Targets",],
+                answer: "Program of Targets"
+            },
+{
+                type: "multiple-choice",
+                question: "34 What field artillery team is organic to each maneuver battalion and selected units to plan and coordinate all available company supporting fires?",
+                options: ["Fire Support Team","Fire Support Element","Fire Direction Team","Fire Support Cell",],
+                answer: "Fire Support Team"
+            },
+{
+                type: "multiple-choice",
+                question: "35 Fire support planning is integrated through targeting and the running estimate. It includes developing integrated fire plans using what?",
+                options: ["Target Lists, Final Protective Fires, Fire Support Execution Matrix, Sync Map","Target Lists, No Fire Lists, Fire Support Execution Matrix, Scheme of Fires, and Overlays","Target Lists, Sync Map, Fire Support Execution Matrix, Scheme of Fires, and Overlays","Target Lists, No Fire Lists, Fire Support Sync Matrix, Scheme of Fires, and Overlays",],
+                answer: "Target Lists, No Fire Lists, Fire Support Execution Matrix, Scheme of Fires, and Overlays"
+            },
+{
+                type: "multiple-choice",
+                question: "36 _____ is the planning and executing of fires so that targets are adequately covered by a suitable weapon or group of weapons.",
+                options: ["Fire Support Coordination","Indirect Fires Execution","Fire Support Planning","Joint Fires Coordination",],
+                answer: "Fire Support Coordination"
+            },
+{
+                type: "multiple-choice",
+                question: "37 _____ can be conducted at any place and time friendly forces are in close proximity to enemy forces.",
+                options: ["Army Attack Aviation","Danger Close","Close Combat Attack","Close Air Support",],
+                answer: "Close Air Support"
+            },
+{
+                type: "multiple-choice",
+                question: "38 _____ is the authority to control the maneuver of and grant weapons release clearance to attacking aircraft.",
+                options: ["Terminal Attack Control (TAC)","Close Air Support (CAS)","Close Combat Attack (CCA)","Tactical Risk Assessment (TRA)",],
+                answer: "Terminal Attack Control (TAC)"
+            },
+{
+                type: "multiple-choice",
+                question: "39 What type of control requires control of individual attacks and the JTAC/FAC (A) to visually acquire the attacking aircraft and visually acquire the target for each attack?",
+                options: ["Type 1 Control","Type 2 Control","Type 3 Control","Type 4 Control",],
+                answer: "Type 1 Control"
+            },
+{
+                type: "multiple-choice",
+                question: "40 What type of control is used when the JTAC/FAC (A) requires control of individual attacks and is unable to visually acquire the attacking aircraft at weapons release or is unable to visually acquire the target?",
+                options: ["Type 1 Control","Type 2 Control","Type 3 Control","Type 4 Control",],
+                answer: "Type 2 Control"
+            },
+{
+                type: "multiple-choice",
+                question: "41 What type of control is used when the JTAC/FAC (A) requires the ability to provide clearance for multiple attacks within a single engagement subject to specific attack restrictions.",
+                options: ["Type 1 Control","Type 2 Control","Type 3 Control","Type 4 Control",],
+                answer: "Type 3 Control"
+            },
+{
+                type: "fill-in-the-blank",
+                question: "42 What does each letter of the memory aid FA-PARCA stand for?",
+                answer: "1.Fire Support Tasks 2.Allocation 3.Positioning 4.Attack Guidance 5.Restrictions 6.Coordinating 7.Assessment"
+            },
+{
+                type: "select-multiple",
+                question: "43 Select all that apply: What types of close air support terminal attack control can a joint fires observer provide target information in support of?",
+                options: ["Type 1 Control","Type 2 Control","Type 3 Control","Type 4 Control",],
+                answer: ["Type 2 Control", "Type 3 Control"]
+            },
+{
+                type: "multiple-choice",
+                question: "44 How many options are used to employ the fire support team?",
+                options: ["4", "5", "3", "2"],
+                answer: "3"
+            },
+{
+                type: "multiple-choice",
+                question: "45 Which FIST employment option consolidates the FIST at the battalion level?",
+                options: ["Option 1 – Battalion Fire Support Team","Option 2 – Company or Troop FIST","Option 3 – Platoon Forward Observer","Option 4 – Consolidated FIST",],
+                answer: "Option 1 – Battalion Fire Support Team"
+            },
+{
+                type: "multiple-choice",
+                question: "46 Which FIST employment option has the FIST assets remaining at the company or troop level?",
+                options: ["Option 1 – Battalion Fire Support Team","Option 2 – Company or Troop FIST","Option 3 – Platoon Forward Observer","Option 4 – Consolidated FIST",],
+                answer: "Option 2 – Company or Troop FIST"
+            },
+{
+                type: "multiple-choice",
+                question: "47 Which FIST employment option makes it to where most platoons in the maneuver companies or troops receive a forward observer?",
+                options: ["Option 1 – Battalion Fire Support Team","Option 2 – Company or Troop FIST","Option 3 – Platoon Forward Observer","Option 4 – Consolidated FIST",],
+                answer: "Option 3 – Platoon Forward Observer"
+            },
+{
+                type: "multiple-choice",
+                question: "48 Which forward observer control option would you use for a more experienced and highly trained FO team, allowing them to call for fire from fire support assets available to support the operation?",
+                options: ["Option 1 - Decentralized","Option 2 - Designated","Option 3 - Centralized","None of the Above",],
+                answer: "Option 1 - Decentralized"
+            },
+{
+                type: "multiple-choice",
+                question: "49 Which forward observer control option would you use to assign a particular fire support asset to an FO from which they may request fire support?",
+                options: ["Option 1 - Decentralized","Option 2 - Designated","Option 3 - Centralized","None of the Above",],
+                answer: "Option 2 - Designated"
+            },
+{
+                type: "multiple-choice",
+                question: "50 Which forward observer control option would you use for maximum control that requires the FO to contact the FIST for each call for fire?",
+                options: ["Option 1 - Decentralized","Option 2 - Designated","Option 3 - Centralized","None of the Above",],
+                answer: "Option 3 - Centralized"
+            },
+{
+                type: "multiple-choice",
+                question: "51 Which vehicle employment option positions the FSO in the fire support vehicle?",
+                options: ["Option 1 - Control","Option 2 - Observation","Option 3 - Independent","Observer","None of the Above",],
+                answer: "Option 1 - Control"
+            },
+{
+                type: "multiple-choice",
+                question: "52 Which vehicle employment option positions the fire support vehicle on terrain to maximize use of the laser designator and rangefinder while the FSO rides in the commander’s vehicle?",
+                options: ["Option 1 - Control","Option 2 - Observation","Option 3 - Independent Observer","None of the Above",],
+                answer: "Option 2 - Observation"
+            },
+{
+                type: "multiple-choice",
+                question: "53 Which vehicle employment option maximizes assets available to the battalion or brigade commander but might degrade the supported unit?",
+                options: ["Option 1 - Control","Option 2 - Observation","Option 3 - Independent Observer","None of the Above",],
+                answer: "Option 3 - Independent Observer"
+            },
+{
+                type: "select-multiple",
+                question: "54 Personnel authorized to perform JFO duties must be-",
+                options: ["A graduate of a primary duty skill identifier and additional ASI producing school.","Designated in writing by the first O-4 in the unit chain of command.","Maintain qualification as described in the ATP 3-09.30 and the JFO MOA","All of the Above",],
+                answer: ["A graduate of a primary duty skill identifier and additional ASI producing school.", "Maintain qualification as described in the ATP 3-09.30 and the JFO MOA"]
+            },
+{
+                type: "multiple-choice",
+                question: "55 Occupying an observation post using SLOCTOP; Identify the item that is NOT part of L-Location.",
+                options: ["Select a position that is not sky lined or easily identifiable as an observation post.","Send the team location to the fires cell, artillery/mortar FDC, and supported maneuver organization.","Select a position on the highest terrain in order to quickly detect enemy forces.","The team should prepare its OF fan for use and begin its terrain sketch.",],
+                answer: "Select a position on the highest terrain in order to quickly detect enemy forces."
+            },
+{
+                type: "multiple-choice",
+                question: "56 Occupying an observation post using SLOCTOP; what is the number one priority for the team?",
+                options: ["Observation","Communication","Targeting","Security",],
+                answer: "Communication"
+            },
+{
+                type: "multiple-choice",
+                question: "57 Occupying an observation post using SLOCTOP; Identify the item that is NOT part of T-targeting.",
+                options: ["Locate targets using the most accurate and expedient means available, incorporate the targets into the terrain sketch.","Conceal the laser designator and rangefinder and operate all lasing devices within safety parameters.","Affix the night and thermal device near the laser designator and rangefinder as soon as possible.","Refine company/troop targets and those assigned by higher headquarters.",],
+                answer: "Refine company/troop targets and those assigned by higher headquarters."
+            },
+{
+                type: "multiple-choice",
+                question: "58 True / False: Occupying an observation post using SLOCTOP; during O - Observation ensure all team members are proficient in friendly or adversary forces recognition.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{
+                type: "multiple-choice",
+                question: "59 Occupying an observation post using SLOCTOP; what does the P stand for?",
+                options: ["Position Occupation","Precision Targeting ","Position Refinement","Position Improvement",],
+                answer: "Position Improvement"
+            },
+{
+                type: "multiple-choice",
+                question: "60 What should be used as the primary means to determine the targets’ location?",
+                options: ["Precision Target Location Equipment", "LLDR", "Map, Compass, and Binoculars","PFED",],
+                answer: "Precision Target Location Equipment"
+            },
+{
+                type: "multiple-choice",
+                question: "61 _____ is the process of measurement of a feature or location on the earth to determine an absolute latitude, longitude, and elevation.",
+                options: ["Targeting","Mensuration","Accuracy","Orienting",],
+                answer: "Mensuration"
+            },
+{
+                type: "multiple-choice",
+                question: "62 An observer must be able to self-locate to within _____ meters or _____ meters if degraded by lack of position locating systems or other navigational aids.",
+                options: ["1 or 150","10 or 150","10 or 100","100 or 250",],
+                answer: "10 or 100"
+            },
+{
+                type: "multiple-choice",
+                question: "63 Azimuth is a horizontal angle measured clockwise from a north base line that could be-",
+                options: ["North, Magnetic, or Map","Mils, Degrees, Cardinals","True North, Grid North, or Magnetic North","True, Map, or Magnetic",],
+                answer: "True North, Grid North, or Magnetic North"
+            },
+{
+                type: "multiple-choice",
+                question: "64 When converting degrees to mils you must multiply the number of degrees by what to determine mils?",
+                options: ["17.8","4.20","17.5","15",],
+                answer: "17.8"
+            },
+{
+                type: "multiple-choice",
+                question: "65 What is the interior angle formed at the target by the intersection of the observer-target and the gun-target lines with its vertex at the target?",
+                options: ["OT Factor","Angle T","Vertex Angle","Vertical Angle",],
+                answer: "Angle T"
+            },
+{
+                type: "multiple-choice",
+                question: "66 If angle T is 500 mils or greater and the observer is getting more of a correction than asked for, what should the observer consider doing?",
+                options: ["End the mission.","Double the OT factor.","Double the corrections.","Cut the corrections.",],
+                answer: "Cut the corrections."
+            },
+{
+                type: "multiple-choice",
+                question: "67 The M22/M24 binocular reticle pattern is divided into increments of _____ with shorter hash marks at _____ increments. ",
+                options: ["100 meters and 10 meters","10 meters and 5 meters","100 mils and 50 mils","10 mils and 5 mils",],
+                answer: "10 mils and 5 mils"
+            },
+{
+                type: "multiple-choice",
+                question: "68 True/False: Hand measurements of angular deviation are the same for all observers.",
+                options: ["True", "False",],
+                answer: "False"
+            },
+{
+                type: "multiple-choice",
+                question: "69 Using a declinated M2 or a lensatic compass on a tripod or other stable platform, the observer can measure direction to an accuracy of how many mils? How far away should observers move away from vehicles to avoid incorrect readings? ",
+                options: ["1 mil and 100 meters","10 mils and 50 meters","1 mil and 50 meters","10 mils and 100 meters",],
+                answer: "10 mils and 50 meters"
+            },
+{
+                type: "multiple-choice",
+                question: "70 What direction will observers convert their direction to for the CFF requests unless otherwise stated?",
+                options: ["True North","Magnetic","Lensatic","Grid",],
+                answer: "Grid"
+            },
+{
+                type: "multiple-choice",
+                question: "71 Using a protractor, the observer can scale direction from a map to an accuracy of how many mils?",
+                options: ["20","10","100","1",],
+                answer: "10"
+            },
+{
+                type: "multiple-choice",
+                question: "72 When a laser range finder is used, distance may be determined to the nearest how many meters?",
+                options: ["10","5","1","100",],
+                answer: "10"
+            },
+{
+                type: "multiple-choice",
+                question: "73 When using the flash to bang method of distance determination, how many meters per second do you multiply by the number of seconds between the time the round impacts (flash) and the time the sound reaches the observer (bang)?",
+                options: ["350","400","450","250",],
+                answer: "350"
+            },
+{
+                type: "multiple-choice",
+                question: "74 Utilizing the flash to bang method of distance determination, you observe the flash and count 14 seconds before hearing the impact, how far is the impact?",
+                options: ["5600 meters","6300 meters","3500 meters","4900 meters",],
+                answer: "4900 meters"
+            },
+{
+                type: "multiple-choice",
+                question: "75 An OF fan has how many radial arms that are 100 mils apart and cover 1,600 mils?",
+                options: ["16","17","12","15",],
+                answer: "17"
+            },
+{
+                type: "multiple-choice",
+                question: "76 Vertical shift is only sent in the target location if the difference in vertical shift is greater than or equal to how many meters? Vertical shift is expressed to the nearest how many meters? ",
+                options: ["30, 10","50, 10","35, 5","5, 5",],
+                answer: "35, 5"
+            },
+{
+                type: "fill-in-the-blank",
+                question: "77 What are the five parts of a terrain sketch?",
+                answer: "Skyline, Intermediate Crests Ridges and Hills, Manmade Features, Natural Features, Labels"
+            },
+{
+                type: "fill-in-the-blank",
+                question: "78 What are the methods of target location?",
+                answer: "Grid, Laser Grid, Polar, Laser Polar, Shift from Known Point, Grid Coordinates from Map Spot"
+            },
+{
+                type: "fill-in-the-blank",
+                question: "79 Fill in the circular error, in feet and meters, for the following TLE categories:CAT I, CAT II, CAT III, CAT IV",
+                answer: "CAT I 0-20 Ft, 0-6m; CAT II 21-50 Ft, 7-15m; CAT III 51-100 Ft, 16-30m; CAT IV 101-300 Ft, 31-91m"
+            },
+{
+                type: "multiple-choice",
+                question: "80 Which of the following is NOT a part of combat identification?",
+                options: ["Detection","Location","Identification","Clarification",],
+                answer: "Clarification"
+            },
+{
+                type: "fill-in-the-blank",
+                question: "81 What are the six elements of the call for fire?",
+                answer: "Observer Identification, Warning Order, Target Location, Target Description, Method of Engagement, Method of Fire and Control"
+            },
+{
+                type: "multiple-choice",
+                question: "82 What does the warning order consist of?",
+                options: ["Type of adjustment, callsign, and method of target location","Mission type, type of adjustment, and the size of element to FFE","Callsign, type of adjustment, and the method of target location","Type of mission, the size of the element to FFE, and the method of target location",],
+                answer: "Type of mission, the size of the element to FFE, and the method of target location"
+            },
+{
+                type: "multiple-choice",
+                question: "83 What type of mission is normally fired on planned targets, and a length of time to continue firing (duration) is associated with the call for fire?",
+                options: ["Adjust Fire","Suppress","FFE","Immediate Suppression or Immediate Smoke",],
+                answer: "Suppress"
+            },
+{
+                type: "multiple-choice",
+                question: "84 What type of mission would you use when engaging a planned target or target of opportunity that has taken friendly maneuver or elements under fire?",
+                options: ["Adjust Fire","Suppression","FFE","Immediate Suppression or Immediate Smoke",],
+                answer: "Immediate Suppression or Immediate Smoke"
+            },
+{
+                type: "multiple-choice",
+                question: "85 When conducting an immediate mission the CFF is sent in three transmissions.",
+                options: ["True","False",],
+                answer: "False"
+            },
+{type: "multiple-choice",
+                question: "86 Using the laser grid method of target location during an adjust fire mission; how are the corrections sent?",
+                options: ["Same as a standard grid mission.","Deviation correction, range correction, and height of burst correction.","In the form of a grid to the burst location.","Sent only as a refinement.",],
+                answer: "In the form of a grid to the burst location."
+            },
+ {type: "multiple-choice",
+                question: "86 In a polar plot mission, a _____ tells the FDC how far, in meters, the target is located above or below the observer's location.",
+                options: ["Altitude","Elevation","Angle T","Vertical Shift",],
+                answer: "Vertical Shift"
+            },
+{type: "multiple-choice",
+                question: "87 In a polar plot mission the FDC only needs to know the target location.",
+                options: ["True","False",],
+                answer: "False"
+            },
+{type: "multiple-choice",
+                question: "88 In a polar plot mission, a _____ tells the FDC how far, in meters, the target is located above or below the observer's location.",
+                options: ["Altitude","Elevation","Angle T","Vertical Shift",],
+                answer: "Vertical Shift"
+            },
+ {type: "multiple-choice",
+                question: "89 True / False:  In a shift from known point mission the range shift is in relation to the observer’s location.",
+                options: ["True","False",],
+                answer: "False"
+            },
+  {type: "fill-in-the-blank",
+                question: "90 The observer must describe the target in enough detail that the FDC can determine the amount and type of ammunition to use. The target description should contain the following:",
+                answer: "What it is, What it's doing, Number of Elements, Degree of Protection, Size and Shape if Significant"
+            },
+ {type: "multiple-choice",
+                question: "91 What is the purpose of the target description in a call for fire?",
+                options: ["So the FDC can determine the amount and type of ammunition to use.","So the commander can approve the target engagement.","To determine the priority on the High Payoff Target List (HPTL).","So the ground commander can make a Tactical Risk Assessment (TRA).",],
+                answer: "So the FDC can determine the amount and type of ammunition to use."
+            },
+ {type: "multiple-choice",
+                question: "92 The method of engagement consists of:",
+                options: ["type of mission, ammunition, danger close, attitude, and mark","warning order, type of mission, trajectory, danger close, and mark","warning order, type of mission, trajectory, attitude, distribution, and mark","type of adjustment, trajectory, ammunition, distribution, danger close, and mark",],
+                answer: "type of adjustment, trajectory, ammunition, distribution, danger close, and mark"
+            },
+ {type: "multiple-choice",
+                question: "93 True / False:  The two types of adjustment that may be employed are area and precision.",
+                options: ["True","False",],
+                answer: "True"
+            },
+ {type: "multiple-choice",
+                question: "94 True / False:  Precision fire is used for Final Protective Fires (FPF) and destruction missions.",
+                options: ["True","False",],
+                answer: "False"
+            },
+ {type: "multiple-choice",
+                question: "95 What are the danger close distances for artillery and mortars / 5-inch naval guns and TLAM?",
+                options: ["600m / 750m","600m / 1000m","600m / 700m","600m / 500m",],
+                answer: "600m / 750m"
+           },
+ {type: "multiple-choice",
+                question: "96 Which of the following is NOT a reason for MARK to be included in the method of engagement?",
+                options: ["To orient self in zone of observation.","To indicate targets to ground troops, aircraft, or other observers.","To mark the Illumination optimal height of burst.","Both A and B",],
+                answer: "Both A and B"
+            },
+ {type: "multiple-choice",
+                question: "97 If an observer wants HE and then WP what term would they use in the call for fire?",
+                options: ["Ammunition","Volume of fire","Followed by","Projectile",],
+                answer: "Followed by"
+            },
+ {type: "multiple-choice",
+                question: "98 If target length, or length and width are given, the observer must also give _____.",
+                options: ["Depth","Attitude","Radius","Altitude",],
+                answer: "Attitude"
+            },
+{type: "fill-in-the-blank",
+                question: "99 What are the 14 methods of control from ATP 3-09.30?",
+                answer: "Fire When Ready, At My Command, Cannot Observe, Time on Target, Time to Target, Coordinated Illumination, Continuous Firing, Cease Loading, Check Fire, Continuous Illumination, Request Splash, Repeat, Duration, Do Not Load"
+            },
+ {type: "multiple-choice",
+                question: "100 If the observer wishes to control the time of delivery of fire, which method of control would the observer utilize?  ",
+                options: ["At My Command","Fire When Ready","Repeat","Mark",],
+                answer: "At My Command"
+            },
+ {type: "multiple-choice",
+                question: "101 Which method of control indicates the observer cannot see the target due to weather, terrain, vegetation, intensity of the conflict, or smoke?",
+                options: ["Unobserved","Lost","Lost Line of Sight","Cannot Observe",],
+                answer: "Cannot Observe"
+            },
+ {type: "multiple-choice",
+                question: "102 Which method of control would an observer use to specify the specific time rounds impact on the target?",
+                options: ["Time on Target","Time to Target","Request Time","Duration",],
+                answer: "Time on Target"
+            },
+ {type: "multiple-choice",
+                question: "103 Which method of control would an observer use to specify the time, in minutes and seconds post hack statement, rounds impact on the target?",
+                options: ["Time on Target","Time to Target","Request Time","Duration",],
+                answer: "Time to Target"
+            },
+ {type: "multiple-choice",
+                question: "104 True / False: The FDC announces SPLASH to the observer 5 seconds prior to round impact.",
+                options: ["True","False",],
+                answer: "True"
+            },
+ {type: "multiple-choice",
+                question: "105 What method of control would an observer utilize if they wished to tell the FDC the total time to engage a target?",
+                options: ["Time on target","Duration","Time","Interval",],
+                answer: "Duration"
+            },
+ {type: "fill-in-the-blank",
+                question: "106 What four items does the MTO consist of?",
+                answer: "Target Number, Number of Rounds, Unit Firing, Changes to CFF"
+            },
+ {type: "select-multiple",
+                question: "107 Select all that apply: What additional information can be sent separately or along with the MTO?",
+                options: ["Probable Error in Range","Angle T","PRF Code","Time of Flight",],
+                answer: ["Probable Error in Range","Angle T","PRF Code","Time of Flight",]
+            },
+  {type: "fill-in-the-blank",
+                question: "108 What are the 9 lines for the 9-Line CAS Brief?",
+                answer: "1.Ingress/ Battle Point 2.Heading and Offset 3.Distance, 4.Elevation 5.Target Description 6.Target Location 7.Mark Type and Terminal Guidance 8.Friendlies 9.Egress "
+            },
+ {type: "fill-in-the-blank",
+                question: "109 What are the 5 lines for the Army attack aviation RW 5-Line Request?",
+                answer: "1.Observer and Warning Order 2.Friendly Location and Mark 3.Target Location 4.Target Description 5.Remarks"
+            },
+ {type: "multiple-choice",
+                question: "110 How many transmissions are transmitted to the ship for the NSFS call for fire?",
+                options: ["Three Transmissions","Five Transmissions","One Transmission","Two Transmissions",],
+                answer: "Two Transmissions"
+            },
+ {type: "multiple-choice",
+                question: "111 What FDC command will the FO receive after sending a CFF as “DNL” or after establishing a priority target?",
+                options: ["Ready","Laid","In Position Ready to Fire","Aimed On",],
+                answer: "Laid"
+            },
+ {type: "multiple-choice",
+                question: "112 What FDC command will the FO receive after sending a CFF as “At My Command” or “By Round, At My Command”?",
+                options: ["Ready","Laid","In Position Ready to Fire","Aimed On",],
+                answer: "Ready"
+            },
+ {type: "multiple-choice",
+                question: "113 What FDC command is used to signify the number of rounds specified in the fire for effect has been fired?",
+                options: ["Splash","Shot","Rounds Complete","End of Mission",],
+                answer: "Rounds Complete"
+            },
+ {type: "multiple-choice",
+                question: "114 _____ is the observer's determination of the location of the burst, or the mean point of impact of a group of bursts, with respect to the adjusting point as observed along the observer-target line.",
+                options: ["Spotting","Correction","Impact","Adjusting point",],
+                answer: "Spotting"
+            },
+ {type: "multiple-choice",
+                question: "115 The sequence of spottings is height of burst, range, and deviation.",
+                options: ["True","False",],
+                answer: "True"
+            },
+    {type: "fill-in-the-blank",
+                question: "116 What are the five HOB spottings and what do they mean?",
+                answer: "Air, Mixed Air, Mixed, Mixed Grazed, Grazed"
+            },
+    {type: "fill-in-the-blank",
+                question: "117 What are the eight range spottings?",
+                answer: "Over, Short, Target, Range Correct, Doubtful, Unobserved, Unobserved Over/Short, Lost"
+            },
+{type: "multiple-choice",
+                question: "118 As an FO calling for fire you observe a round impact beyond the adjusting point. What range spotting would that be?",
+                options: ["Target","Air","Doubtful","Over",],
+                answer: "Over"
+            },
+{type: "multiple-choice",
+                question: "119 During the impact portion of a registration you spot a round that impacts on the registration point. What range spotting would that be?",
+                options: ["Range Correct","Target","Mixed","Spot On",],
+                answer: "Target"
+            },
+{type: "multiple-choice",
+                question: "120 While executing a CFF you receive a Splash call for AA1020. After waiting 5 seconds for the impact you neither see nor hear the round impact. What spotting would you make?",
+                options: ["Doubtful","Unobserved","Lost","Cannot Observe",],
+                answer: "Lost"
+           },
+{type: "multiple-choice",
+                question: "121 While executing a CFF you receive a Splash call for AA1025. After waiting 5 seconds for the impact you aren’t able to visually acquire the impact, but you hear it but you’re unable to make out if it’s over or short. What spotting would you make?",
+                options: ["Doubtful","Unobserved","Lost","Cannot Observe",],
+                answer: "Unobserved"
+            },
+{type: "fill-in-the-blank",
+                question: "122 What are the three deviation spottings?",
+                answer: "Left, Line, Right"
+            },
+{type: "multiple-choice",
+                question: "123 A spotting of “LINE” is a round that impacts on line with the adjusting point as seen by the observer (on the observer-target line).",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "124 As an observer on the hill, you spot a round to the right of the observer-target line. Using your binoculars you measure the angular deviation to be 40 mils to the right. How would you record your spotting of the round?",
+                options: ["Left 40","Depends on OT Factor","Right 40","40 Right",],
+                answer: "40 Right"
+            },
+ {type: "fill-in-the-blank",
+                question: "125 What are the 15 subsequent corrections in sequence (in order)?",
+                answer: "Observer Target Direction, Danger Close, Trajectory, Method of Fire, Distribution, Projectile, Fuze, Volume of Fire, Deviation Correction, Range Correction, HOB Correction, Target Description, Mission Type/ Method of Control, Splash, Repeat"
+            },
+{type: "multiple-choice",
+                question: "126 Send the observer-target direction if it has not been sent previously or if the observer-target direction changes by more than _____ from the previously announced direction.",
+                options: ["10 mils","50 mils","20 mils","100 mils",],
+                answer: "100 mils"
+            },
+{type: "multiple-choice",
+                question: "127 What correction do you need to send before a control correction during an immediate suppression or when attacking a new target without sending a new call for fire?",
+                options: ["Altitude","Target description","Number of rounds","Repeat",],
+                answer: "Target description"
+            },
+{type: "fill-in-the-blank",
+                question: "128 What are the four adjustment techniques used to conduct area adjustment fires?",
+                answer: "Successive Bracketing, Hasty Bracketing, One Round Adjust, Creeping Fire"
+            },
+{type: "multiple-choice",
+                question: "129 Which adjustment technique mathematically ensures FFE rounds will be within 50 meters of the target?",
+                options: ["Creeping Fire","One Round Adjustment","Precision Fire","Successive Bracketing",],
+                answer: "Successive Bracketing"
+            },
+{type: "multiple-choice",
+                question: "130 Which adjustment technique is best when responsive fires are required, and the observer is experienced in the adjustment of fire?",
+                options: ["Creeping Fire","One Round Adjustment","Hasty Bracketing","Successive Bracketing",],
+                answer: "One Round Adjustment"
+            },
+{type: "multiple-choice",
+                question: "131 You’re an observer on the hill and you identify an enemy approximately 500 meters from your position. You announce DANGER CLOSE in your method of engagement. While adjusting your rounds, which adjustment technique is best suited for your situation?",
+                options: ["Creeping Fire","One Round Adjustment","Hasty Bracketing","Successive Bracketing",],
+                answer: "Creeping Fire"
+            },
+{type: "multiple-choice",
+                question: "132 Normally, the observer using successive bracketing requests FFE once the _____ meter bracket is split. Under certain conditions when the PER of the weapon is _____ meters or larger, an observer is justified in calling for FFE when a _____ meter bracket is split.",
+                options: ["50, 38, 100","100, 25, 200","50, 25, 100","100, 38, 200",],
+                answer: "100, 38, 200"
+            },
+{type: "multiple-choice",
+                question: "133 How is a registration initiated?",
+                options: ["With a message to observer.","H18 this is H44, adjust fire, over.","H18 this is H44, registration, over.","With a courtesy call.",],
+                answer: "With a message to observer."
+            },
+{type: "select-multiple",
+                question: "134 The objective of an impact registration is to get spottings of _____ along the observer-target line from rounds fired with the same data or from rounds fired with data 25 meters apart.",
+                options: ["2 rounds (1 over and 1 short)","2 rounds (target hit or range correct)","4 rounds (target hit or range correct)","4 rounds (2 over and 2 short)",],
+                answer: ["2 rounds (target hit or range correct)", "4 rounds (2 over and 2 short)",]
+            },
+  {type: "multiple-choice",
+                question: "135 True / False: If PER is greater than or equal to 25 meters the objective of impact registration is to get spottings of four rounds (two over and two short) along the observer-target line from rounds fired with the same data or from rounds fired with data 50 meters apart.",
+                options: ["True","False",],
+                answer: "True"
+            },
+  {type: "multiple-choice",
+                question: "136 While conducting a registration you spot a round target or range correct. What does that round provide a spotting as?",
+                options: ["Both over and short", "Target", "Line","Accurate and sufficient",],
+                answer: "Both over and short"
+            },
+  {type: "multiple-choice",
+                question: "137 During an impact registration the observer spots the rounds for deviation to the nearest one mil and brings the rounds onto the observer-target line before _____.",
+                options: ["Splitting a 400 meter bracket","Adding or dropping", "Splitting a 200 meter bracket","Corrections are made",],
+                answer: "Splitting a 200 meter bracket"
+            },
+  {type: "multiple-choice",
+                question: "138 During an impact registration when the 50 meter range bracket has been established, how many round(s) are fired with data 25 meters in the direction opposite that of the last range spotting?",
+                options: ["1","2","4","FFE",],
+                answer: "2"
+            },
+  {type: "multiple-choice",
+                question: "139 During an impact registration, if the registration point is nearer the last round(s) fired, what is the range refinement necessary to move the impact toward the registration point?",
+                options: ["Add or Drop 10","Add or Drop 25","No Range Refinement is Necessary","Add or Drop 20",],
+                answer: "No Range Refinement is Necessary"
+            },
+  {type: "multiple-choice",
+                question: "140 If the registration point is equidistant between the two sets of rounds, what does the observer determine the range refinement to be from the last data fired?",
+                options: ["Add or Drop 10","Add or Drop 25","No Range Refinement is Necessary","Add or Drop 20",],
+                answer: "Add or Drop 10"
+            },
+  {type: "multiple-choice",
+                question: "141 If the registration point is nearer the pair of rounds at the opposite end of the bracket, what does the observer determine the range refinement to be?",
+                options: ["Add or Drop 10","Add or Drop 25","No Range Refinement is Necessary","Add or Drop 20",],
+                answer: "Add or Drop 20"
+            },
+  {type: "multiple-choice",
+                question: "142 What form would an observer use to keep track of the rounds and spottings in relation to the registration point?",
+                options: ["DA 5429","DA 4187","DA 2185","Shell Report",],
+                answer: "DA 5429"
+            },
+  {type: "multiple-choice",
+                question: "143 In registration, deviation refinement is determined by adding the deviation spottings of the rounds establishing the two over and two short (this may include two, three, or four deviation spottings). Then _____ the total of the deviation spottings by the number of rounds (two, three, or four) to get an average deviation. Express the result to the nearest mil. The average deviation multiplied by the observer-target factor equals the correction, which the observer expresses to the nearest _____.",
+                options: ["Multiply, 10 mils","Divide, 10 meters","Subtract, 1 meter","Add, 1 mil",],
+                answer: "Divide, 10 meters"
+            },
+  {type: "multiple-choice",
+                question: "144 Using the following information, what should the observer send to the FDC as their deviation refinement for a registration? OT Factor of 2; Spottings of +7R, +15R, -5L, and +3R.",
+                options: ["Left 20","Right 20","Right 10","Left 10",],
+                answer: "Left 10"
+            },
+  {type: "multiple-choice",
+                question: "145 Mortar registration procedures are identical to the impact registration procedures for artillery. The exception is that once a _____ meter range bracket has been split and the last round fired is within _____ meters of the target, the observer sends refinement corrections to the FDC and ends the mission. Make range corrections to the nearest 25 meters. Only _____ round over and _____ round short are required.",
+                options: ["50, 25, 2, 2","100, 50, 2, 2","50, 25, 1, 1","100, 50, 1, 1",],
+                answer: "100, 50, 1, 1"
+            },
+  {type: "multiple-choice",
+                question: "146 What is the additional step that is not required for artillery but may be required for mortars during a registration?",
+                options: ["Adjust the Sheaf","Time Registration","Adjust the FPF","ToT Registration",],
+                answer: "Adjust the Sheaf"
+            },
+  {type: "multiple-choice",
+                question: "147 When adjusting the sheaf for mortars during a registration, what does the observer base the determination for the method of fire on?",
+                options: ["Vegetation","Wind Direction","Hydrography","Cloud Coverage",],
+                answer: "Wind Direction"
+            },
+  {type: "multiple-choice",
+                question: "148 When adjusting the sheaf for mortars during a registration, how is the sheaf adjusted?",
+                options: ["On line with a 40 meter lateral spread, perpendicular to the observer-target line.","On line with a 50 meter lateral spread, perpendicular to the gun-target line.","On line with a 75 meter lateral spread, perpendicular to the observer-target line.","On line with a 40 meter lateral spread, perpendicular to the gun-target line.",],
+                answer: "On line with a 40 meter lateral spread, perpendicular to the gun-target line."
+            },
+  {type: "multiple-choice",
+                question: "149 What is the objective of the time portion of the precision registration?",
+                options: ["4 rounds fired with the same data 20 meters above the registration point.","2 rounds fired with the same data 20 meters above the registration point.","4 rounds fired with the same data 40 meters above the registration point.","2 rounds fired with the same data 40 meters above the registration point.",],
+                answer: "4 rounds fired with the same data 20 meters above the registration point."
+            },
+  {type: "multiple-choice",
+                question: "150 What is the automatic HOB correction for the time portion of the precision registration if the first round is spotted as a graze burst?",
+                options: ["Up 20","Up 40","Down 20","Down 40",],
+                answer: "Up 40"
+            },
+  {type: "multiple-choice",
+                question: "151 During the time portion of the precision registration, once the observer achieves a measurable airburst, what is the command given?",
+                options: ["Repeat","2 Rounds Repeat","3 Rounds Repeat","4 Rounds Repeat",],
+                answer: "3 Rounds Repeat"
+            },
+  {type: "multiple-choice",
+                question: "152 During the time portion of the precision registration, when three airbursts and one graze burst is spotted what is the HOB correction?",
+                options: ["No correction is required.","Up 10","Up 20","Up 40",],
+                answer: "No correction is required."
+            },
+  {type: "multiple-choice",
+                question: "153 During the time portion of the precision registration, when two airbursts and two graze bursts are spotted what is the HOB correction?",
+                options: ["No correction is required.","Up 10","Up 20","Up 40",],
+                answer: "Up 10"
+            },
+  {type: "multiple-choice",
+                question: "154 During the time portion of the precision registration, when one airburst and three graze bursts are spotted what is the HOB correction?",
+                options: ["No correction is required.","Up 10","Up 20","Up 40",],
+                answer: "Up 20"
+            },
+  {type: "multiple-choice",
+                question: "155 In the event an Excalibur projectile does not acquire adequate GPS signal, or experiences a reliability failure in flight, the round is designed to _____.",
+                options: ["Continue its flight path to the target un-armed and impact as a dud.","Continue to target as a non-PGM and function as a standard HE round.","Continue its trajectory to the ballistic impact point without arming and dud.","Continue its trajectory to the ballistic impact point and function as a standard HE round.",],
+                answer: "Continue its trajectory to the ballistic impact point and function as a standard HE round."
+            },
+  {type: "multiple-choice",
+                question: "156 For Excalibur calls for fire, what is the minimum the grid locations will be expressed to?",
+                options: ["10 digits","12 digits","8 digits","6 digits",],
+                answer: "10 digits"
+            },
+  {type: "multiple-choice",
+                question: "157 What must the observer specify in the target location portion of an Excalibur CFF?",
+                options: ["TLE","CEP","PER","None of the Above",],
+                answer: "TLE"
+            },
+  {type: "multiple-choice",
+                question: "158 What munition is available to utilize with the 120mm mortar that minimizes collateral damage and reduces the number of rounds required to create the desired effects on the target?",
+                options: ["XM 982","APKWS","APMI","Copperhead",],
+                answer: "APMI"
+            },
+  {type: "multiple-choice",
+                question: "159 What fuze can be added to 155mm Artillery M795 HE and M549A1 HERA rounds to increase precision?",
+                options: ["APKWS","Excalibur","PGK","APMI",],
+                answer: "PGK"
+            },
+  {type: "multiple-choice",
+                question: "160 How many sub munitions are in the M449 family of APICMs?",
+                options: ["60","88","72","42",],
+                answer: "60"
+            },
+  {type: "multiple-choice",
+                question: "161 How many sub munitions are in the M4831A1 DPICM?",
+                options: ["60","88","72","42",],
+                answer: "88"
+            },
+  {type: "multiple-choice",
+                question: "162 How many sub munitions are in the M864 DPICM?",
+                options: ["60","88","72","42",],
+                answer: "72"
+            },
+  {type: "multiple-choice",
+                question: "163 Which of the following options is NOT a use of illumination?",
+                options: ["Illuminate areas of suspected adversary activity.","Provide illumination for night adjustment of fires.","Mark friendly location for CAS attacks.","Harass adversary positions.",],
+                answer: "Mark friendly location for CAS attacks."
+            },
+  {type: "multiple-choice",
+                question: "164 What is the initial height of burst in meters for the M485A2 illumination round?",
+                options: ["600","500","550","750",],
+                answer: "600"
+            },
+  {type: "multiple-choice",
+                question: "165 What is the rate of descent for M485A2 illumination rounds?",
+                options: ["8 meters per second","5 meters per second","10 meters per second","6 meters per second",],
+                answer: "5 meters per second"
+            },
+  {type: "multiple-choice",
+                question: "166 What is the initial height of burst for all 105mm illumination rounds?",
+                options: ["600","500","550","750",],
+                answer: "750"
+            },
+  {type: "multiple-choice",
+                question: "167 What is the initial height of burst for all 120mm illumination rounds?",
+                options: ["600","500","550","750",],
+                answer: "500"
+            },
+  {type: "multiple-choice",
+                question: "168 Which illumination pattern would you use when an area requires more illumination than can be furnished by one gun illumination?",
+                options: ["Two Gun Illumination Range Spread","Two Gun Illumination","Multi-Gun Illumination",],
+                answer: "Two Gun Illumination"
+            },
+  {type: "multiple-choice",
+                question: "169 Which illumination pattern is fired perpendicular to the observer target line?",
+                options: ["Two Gun Illumination Range Spread","Two Gun Illumination Lateral Spread","Multi-Gun Illumination","Two Gun Illumination",],
+                answer: "Two Gun Illumination Lateral Spread"
+            },
+  {type: "multiple-choice",
+                question: "170 Which illumination pattern would you use to illuminate an area with practically no shadows or dark spots?.",
+                options: ["Two Gun Illumination","Illumination Lateral Spread","Illumination OTL and GTL Spread","Four Gun Illumination Pattern",],
+                answer: "Four Gun Illumination Pattern"
+            },
+  {type: "multiple-choice",
+                question: "171 What is the minimum deviation or range correction made while adjusting illumination?",
+                options: ["100","50","30","200",],
+                answer: "200"
+            },
+{type: "multiple-choice",
+                question: "172 When adjusting illumination rounds, what are HOB corrections sent in multiples of?",
+                options: ["5 meters","50 meters","100 meters","10 meters",],
+                answer: "50 meters"
+            },
+{type: "multiple-choice",
+                question: "173 During an illumination mission, if the flare burns out 60 mils above the ground and the OT factor is 2, what correction should the Observer send for HOB?",
+                options: ["Down 150","Down 120","Down 100","Down 50",],
+                answer: "Down 100"
+            },
+{type: "multiple-choice",
+                question: "174 During an illumination mission your round burns on the ground for 13 seconds. You are observing 155mm M485A2 illumination rounds and the rate of decent is 5 meters per second. What is your HOB correction?",
+                options: ["Up 100","Up 50","No refinement","Up 150",],
+                answer: "Up 50"
+            },
+{type: "multiple-choice",
+                question: "175 True / False:  The four types of smoke are obscuring, marking, incendiary, and deception.",
+                options: ["True","False",],
+                answer: "False"
+            },
+{type: "multiple-choice",
+                question: "176 Which type of smoke is a smoke curtain used on the battlefield between threat observation points and friendly units to mask friendly forces, positions, and activities?",
+                options: ["Signaling smoke","Obscuring smoke","Screening smoke","Signaling smoke",],
+                answer: "Screening smoke"
+            },
+{type: "multiple-choice",
+                question: "177 Which type of smoke is placed on or near the threat to suppress threat observers and to minimize their vision?",
+                options: ["Deception smoke","Obscuring smoke","Screening smoke","Masking smoke",],
+                answer: "Obscuring smoke"
+            },
+{type: "multiple-choice",
+                question: "178 Which range of wind speed is best for the production of smoke screens?",
+                options: ["4 to 14 knots","0 to 20 knots","4 to 20 knots","0 to 14 knots",],
+                answer: "4 to 14 knots"
+           },
+{type: "multiple-choice",
+                question: "179 How wide, in meters, would you use a quick smoke mission to obscure areas?",
+                options: ["600 to 1500","150 to 500","600 to 1000","150 to 600",],
+                answer: "150 to 600"
+            },
+{type: "multiple-choice",
+                question: "180 A quick smoke mission requires the observer to send length, maneuver target line, wind direction, and duration in the call for fire.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "181 During a quick smoke CFF using shell smoke (HC) you use HE in adjustment until which bracket is split?",
+                options: ["100","200","400","50",],
+                answer: "200"
+            },
+{type: "multiple-choice",
+                question: "182 What is the minimum deviation correction for smoke?",
+                options: ["20 meters","30 meters","40 meters","50 meters",],
+                answer: "50 meters"
+            },
+{type: "multiple-choice",
+                question: "183 What is the minimum range correction for smoke?",
+                options: ["50 meters","100 meters","200 meters","400 meters",],
+                answer: "100 meters"
+            },
+{type: "multiple-choice",
+                question: "184 Final protective fires may be any distance from the friendly position but is normally within _____ to _____ meters (danger close) of friendly positions.",
+                options: ["200 to 400","200 to 600","400 to 600","100 to 400",],
+                answer: "200 to 400"
+            },
+{type: "multiple-choice",
+                question: "185 True / False:  Once a target number is assigned, the observer should begin each correction with the observer identification, followed by the target number, and ending with the desired correction.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "186 How far away from the target should an auxiliary adjusting point be?",
+                options: ["700 meters","450 meters","600 meters","500 meters",],
+                answer: "500 meters"
+            },
+{type: "multiple-choice",
+                question: "187 Linear and rectangular targets require orientation in terms of direction. The observer must send target description, length, width, and what else in the third transmission of the call for fire?",
+                options: ["Direction","Elevation","Attitude","Radius",],
+                answer: "Attitude"
+            },
+{type: "multiple-choice",
+                question: "188 Attitude is sent to the nearest how many mils?",
+                options: ["1 mil","10 mils","20 mils","100 mils",],
+                answer: "100 mils"
+            },
+{type: "multiple-choice",
+                question: "189 Which naval surface fire support (NSFS) brevity term is used for a nonscheduled fire mission report?",
+                options: ["Honey","Pepper","Pickle","Candy",],
+                answer: "Pepper"
+            },
+{type: "multiple-choice",
+                question: "190 Which naval surface fire support (NSFS) brevity term is used for a new target report?",
+                options: ["Honey","GURF","Pickle","Candy",],
+                answer: "Honey"
+            },
+{type: "multiple-choice",
+                question: "191 Which naval surface fire support (NSFS) brevity term is used for an unfired target report?",
+                options: ["Honey","GURF","Pickle","Candy",],
+                answer: "Pickle"
+            },
+{type: "multiple-choice",
+                question: "192 Which naval surface fire support (NSFS) brevity term is used for an ammunition remaining report?",
+                options: ["Honey","GURF","Pickle","Candy",],
+                answer: "Candy"
+            },
+{type: "multiple-choice",
+                question: "193 Which naval surface fire support (NSFS) brevity term is used that summarizes naval gunfire support (NGFS) capability when unknown to an NGFS station?",
+                options: ["Honey","GURF","Pickle","Candy",],
+                answer: "GURF"
+            },
+{type: "multiple-choice",
+                question: "194 What additional information is sent along with the warning order in the first transmission of the naval surface fire support (NSFS) call for fire?",
+                options: ["GURF","Description","Target Number","Method of Control",],
+                answer: "Target Number"
+            },
+{type: "multiple-choice",
+                question: "195 What is the maximum range, in meters, of the M777 series 155mm howitzer w/M232?",
+                options: ["18200","37500","22500","21700",],
+                answer: "22500"
+            },
+{type: "multiple-choice",
+                question: "196 What is the maximum range, in meters, of the M224/M224A1 60mm mortar?",
+                options: ["3500","3489","3600","3689",],
+                answer: "3500"
+            },
+{type: "multiple-choice",
+                question: "197 What is the maximum range, in meters, of the M252/M252A1 81mm mortar?",
+                options: ["5800","4800","4600","5400",],
+                answer: "5800"
+            },
+{type: "multiple-choice",
+                question: "198 What is the maximum range, in meters, of the M120/M120A1 120mm mortar using the M929 WP round?",
+                options: ["5800","7200","7400","7120",],
+                answer: "7120"
+            },
+{type: "multiple-choice",
+                question: "199 What is the maximum range, in meters, of the M982 Excalibur projectile?",
+                options: ["44,000","24,500","22,200","37,500",],
+                answer: "37,500"
+            },
+{type: "fill-in-the-blank",
+                question: "200 What are the 12 steps of the CAS execution template?",
+                answer: "Routing and Safety of Flight, Close Air Support Aircraft Check-in, Situation Update, Game Plan, CAS Brief, Remarks and Restrictions, Readbacks, Correlation, Attack, Assess Effects, Battle Damage Assessment, Routing and Safety of Flight"
+            },
+{type: "fill-in-the-blank",
+                question: "201 What does each letter of the situation update stand for when using TEFACHR?",
+                answer: "Threat, Enemy Situation, Friendly Update, Artillery, Clearance Authority, Hazards, Remarks and Restrictions"
+            },
+{type: "multiple-choice",
+                question: "202 The BDA report for a CAS engagement should include size, activity, location, time, and remarks (SALTR). If conditions preclude briefing full BDA, at a minimum what do you pass?",
+                options: ["Good effects, damage, and time","Good bombs, no need for re-attack","End of mission","Successful, unsuccessful, or unknown",],
+                answer: "Successful, unsuccessful, or unknown"
+            },
+{type: "multiple-choice",
+                question: "203 What can JTACs and FAC(A)s use to develop and correlate targeting data, mark targets, and provide terminal guidance operations?",
+                options: ["LLDRs","Digitally aided CAS","Ground burst illumination","JFOs",],
+                answer: "JFOs"
+            },
+{type: "multiple-choice",
+                question: "204 What is line 8 of the JFO target brief?",
+                options: ["Mark type","Location of friendlies","Target location","Egress",],
+                answer: "Location of friendlies"
+            },
+{type: "multiple-choice",
+                question: "205 After receiving the army attack aviation call for fire from the ground forces, the aircrews are not required to identify the location of the friendly element and the target prior to conducting an engagement.",
+                options: ["True","False",],
+                answer: "False"
+            },
+{type: "multiple-choice",
+                question: "206 Army Attack Aviation and Special Operations Forces (SOF) gunship use the same call for fire format.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "207 How would an observer maintain positive control of the SOF Gunship or Army Attack Aviation during an engagement?",
+                options: ["State “I am not a JTAC”","State “Do Not Load”","State “Check Fire”","State “At My Command”",],
+                answer: "State “At My Command”"
+            },
+{type: "multiple-choice",
+                question: "208 Clearance to fire is the transmission of the Aviation/SOF gunship call for fire unless “at my command” or “danger close” has been stated.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "209 If “danger close” has been announced in an Aviation/SOF gunship call for fire what else must be passed to the attacking aircraft?",
+                options: ["Grid to Nearest Friendlies","Ground Commander’s Risk Assessment","Ground Commander’s Initials","At My Command",],
+                answer: "Ground Commander’s Initials"
+            },
+{type: "multiple-choice",
+                question: "210 Do Army Attack Aviation or AC-130 engagements require terminal attack control?",
+                options: ["No","No, unless a CAS 9-Line is passed.","Yes","Yes, unless prior coordination was executed.",],
+                answer: "No"
+            },
+{type: "fill-in-the-blank",
+                question: "211 When executing CAS without a JTAC or FAC(A) qualified individual, what must you advise the aircrew?",
+                answer: "I am not a JTAC"
+            },
+{type: "select-multiple",
+                question: "212 Select all that apply: What methods can be used to integrate and deconflict aircraft and surface fires?",
+                options: ["Lateral Separation","Altitude","Time","Massing",],
+                answer: ["Lateral Separation","Altitude","Time",]
+            },
+{type: "multiple-choice",
+                question: "213 When is a gun-target line considered hot?",
+                options: ["Once the gun reports laid.","Once the FDC receives the CFF.","Once the firing unit is actively firing.","Once you pass the GTL in the Remarks/Restrictions.",],
+                answer: "Once the firing unit is actively firing."
+            },
+{type: "multiple-choice",
+                question: "214 Which of these fixed wing aircraft is equipped with 30mm, 105mm, and small diameter bombs?",
+                options: ["F-16","B-1B","F/A-18","AC-130J",],
+                answer: "AC-130J"
+            },
+{type: "multiple-choice",
+                question: "215 Which of these fixed wing aircraft can be equipped with 20mm, 2.75-inch rockets, AGM-65, HARM, and SDBs?",
+                options: ["B-52","F-16","F-15E","F-35",],
+                answer: "F-16"
+            },
+{type: "multiple-choice",
+                question: "216 The AH-64 is equipped with 30mm, 2.75-inch rockets, and Hellfires.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "217 What UAS can be equipped with GBU and Hellfire ordnances?",
+                options: ["MQ-1C","MQ-9","MQ-5B","Predator",],
+                answer: "MQ-9"
+            },
+{type: "multiple-choice",
+                question: "218 What brevity term means to discontinue stated activity?",
+                options: ["Stop","Halt","Discontinue","Cease",],
+                answer: "Cease"
+            },
+{type: "multiple-choice",
+                question: "219 What brevity term would you use to begin using briefed communication procedures to counter communications jamming?",
+                options: ["Chattermark","Soiled","Net Call","Tampered",],
+                answer: "Chattermark"
+            },
+{type: "multiple-choice",
+                question: "220 What brevity term is a call to inbound aircraft that the LZ, HLZ, or DZ has enemy activity above the prebriefed risk tolerance?",
+                options: ["Ice","Cherry","Hot","Chili",],
+                answer: "Cherry"
+            },
+{type: "multiple-choice",
+                question: "221 What brevity term is a call to inbound aircraft that the LZ, HLZ, or DZ has enemy activity below the prebriefed risk tolerance?",
+                options: ["Ice","Cherry","Hot","Chili",],
+                answer: "Ice"
+            },
+{type: "multiple-choice",
+                question: "222 What brevity term means sighting of a FRIENDLY aircraft or ground position?",
+                options: ["Contact","Spot","Eyes on","Visual",],
+                answer: "Visual"
+            },
+{type: "multiple-choice",
+                question: "223 What brevity term acknowledges sighting a specified reference point (either visually or via sensor)?",
+                options: ["Visual","Spot","Contact","Joy",],
+                answer: "Contact"
+            },
+{type: "multiple-choice",
+                question: "224 What brevity term means sighting a target, non-friendly aircraft, or enemy position?",
+                options: ["Tally","Contact","Bogey","Squirter",],
+                answer: "Tally"
+            },
+{type: "multiple-choice",
+                question: "225 What brevity term means acquisition of laser designation, or the platform is laser spot tracker (LST) capable?",
+                options: ["Capture","Spot","Contact","Acquire",],
+                answer: "Spot"
+            },
+{type: "multiple-choice",
+                question: "226 What brevity term means the laser designator system is inoperative?",
+                options: ["Dead eye","Blind","No joy","Terminated",],
+                answer: "Dead eye"
+            },
+{type: "multiple-choice",
+                question: "227 What brevity term means mark or marking a target by infrared (IR) pointer?",
+                options: ["Snake","Pulse","Lasing","Sparkle",],
+                answer: "Sparkle"
+            },
+{type: "multiple-choice",
+                question: "228 What brevity term means oscillate an IR pointer in a figure eight about a target?",
+                options: ["Pulse","Snake","Sparkle","Rope",],
+                answer: "Snake"
+            },
+{type: "multiple-choice",
+                question: "229 What brevity term means an object has been acquired and is being tracked with an onboard sensor?",
+                options: ["Track","Captured","Spot","Contact",],
+                answer: "Captured"
+            },
+{type: "multiple-choice",
+                question: "230 What brevity term means FRIENDLY air-to-surface missile launch?",
+                options: ["One away","Remington","Rifle","Winchester",],
+                answer: "Rifle"
+            },
+{type: "multiple-choice",
+                question: "231 What brevity term means no ordnance remaining?",
+                options: ["Remington","Winchester","Rifle","Browning",],
+                answer: "Winchester"
+            },
+{type: "multiple-choice",
+                question: "232 _____ is the unintentional or incidental injury or damage to persons or objects that are not lawful military targets in the circumstances ruling at the time.",
+                options: ["Fratricide","Collateral damage","Error probability","Retrograde",],
+                answer: "Collateral damage"
+            },
+{type: "multiple-choice",
+                question: "233 For air-to-surface weapons JTACs, aircrew, and commanders will refer to the standing posture column of the REDs to determine when DANGER CLOSE procedures apply, regardless of friendly force posture.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "234 A _____ is a target whose loss to the enemy will significantly contribute to the success of the friendly course of action.",
+                options: ["High-Value Target","High-Value Individual","High-Payoff Target","High-Yield Target",],
+                answer: "High-Payoff Target"
+            },
+{type: "multiple-choice",
+                question: "235 The role of the Field Artillery is to _____ the enemy by cannon, rocket, and missile fire and to integrate and synchronize all fire support assets into operations.",
+                options: ["Suppress, Neutralize, or Destroy","Destroy, Deter, or Defeat","Disrupt, Defeat, or Destroy","Destroy, Deny, or Disrupt",],
+                answer: "Suppress, Neutralize, or Destroy"
+            },
+{type: "multiple-choice",
+                question: "236 What are the two Field Artillery core competencies provided to Army operations?",
+                options: ["Provide Timely and Accurate Fires and to Eliminate Threats on the Battlefield","Mass Fires and Balance the Army Ethic","Coordinate Fire Support and to Deliver Indirect Fire","Coordinate Joint Fires and to Combine Multinational Assets",],
+                answer: "Coordinate Fire Support and to Deliver Indirect Fire"
+            },
+{type: "multiple-choice",
+                question: "237 The _____ is the senior field artillery commander for the theater, corps, division, brigade combat team who is the maneuver commander’s primary advisor to plan, coordinate, and integrate field artillery and fire support in the execution of assigned tasks.",
+                options: ["Chief of Fires","Fire Support Commandant","Fire Support Officer","Fire Support Coordinator",],
+                answer: "Fire Support Coordinator"
+            },
+{type: "multiple-choice",
+                question: "238 What are the four Fire Support functions?",
+                options: ["Command and Control, Target Acquisition, Attack Systems, and Delivery Systems","Support Forces in Contact, Support the Concept of Operations, Synchronize and Converge FS Across All Domains, and Sustain and Protect the FS System","Destroy Adversaries, Eliminate Threats, Protect the Force, and Provide Accurate and Timely Fire Support","Violently Apply Lethal Fires, Operate In the Spirit of the Offense, Operate as a Single Entity, and Act in Accordance with the Law of War",],
+                answer: "Support Forces in Contact, Support the Concept of Operations, Synchronize and Converge FS Across All Domains, and Sustain and Protect the FS System"
+            },
+{type: "multiple-choice",
+                question: "239 Who is the fire support representative for the maneuver platoon?",
+                options: ["Fire Support Team","Fire Support Element","Fires and Effects Coordination Center","Forward Observer",],
+                answer: "Forward Observer"
+            },
+{type: "multiple-choice",
+                question: "240 What is a tactical plan for using the weapons of a unit or formation so that their fire will be coordinated?",
+                options: ["Scheme of Maneuver","Fire Plan","Annex D","Offensive Plan",],
+                answer: "Fire Plan"
+            },
+{type: "multiple-choice",
+                question: "241 The _____ is a specialized, regionally focused Army element that serves as the senior Army operational commander’s liaison with the air component. A _____ is co-located with the joint or combined AOC.",
+                options: ["Ground Liaison Detachment","Battlefield Coordination Detachment","Fires and Effects Coordination Cell","Joint Fires Cell",],
+                answer: "Battlefield Coordination Detachment"
+            },
+{type: "multiple-choice",
+                question: "242 The _____ is an air liaison unit co-located with ground maneuver units. _____s are under the operational control of the ASOC and have two primary missions: to advise ground commanders on the capabilities and limitations of air operations (the responsibility of the air liaison officer [ALO]) and provide terminal attack control of CAS aircraft (the responsibility of the JTACs).",
+                options: ["JFO","TACP","JTAC","TACE",],
+                answer: "TACP"
+            },
+{type: "multiple-choice",
+                question: "243 What is the detection, identification, and location of a target in sufficient detail to permit effective employment of capabilities that create the required effects?",
+                options: ["Target Acquisition","The Targeting Process","Attack Guidance","Target Exploitation",],
+                answer: "Target Acquisition"
+            },
+{type: "multiple-choice",
+                question: "244 What are actions executed to deliberately mislead adversary military, paramilitary, or violent extremist organization decision makers, thereby causing the adversary to take specific actions (or inactions) that will contribute to the accomplishment of the friendly mission?",
+                options: ["Military Defeat","Military Deception","Military Delay","Military Destroy",],
+                answer: "Military Deception"
+            },
+{type: "multiple-choice",
+                question: "245 Army _____ operations are designed to support operational and tactical plans by protecting Army aviation assets near the forward line of own troops (FLOT) or during cross-FLOT operations. _____ also includes the protection of Air Force aircraft (such as CAS aircraft) supporting the ground commander’s operation.",
+                options: ["Immediate Suppression","Destruction Mission","Suppression of Enemy Air Defense","Offensive Task",],
+                answer: "Suppression of Enemy Air Defense"
+            },
+{type: "multiple-choice",
+                question: "246 _____ is the specific targeting of enemy indirect fire systems including their command and control, sensors, platforms, and logistics before they engage friendly forces.",
+                options: ["Counterfire","Reactive Counterfire","Proactive Counterfire","Deliberate Counterfire",],
+                answer: "Proactive Counterfire"
+            },
+{type: "multiple-choice",
+                question: "247 _____ provides immediate indirect and joint fires to neutralize, destroy, and suppress enemy indirect fire weapons once acquired.",
+                options: ["SEAD Mission","Reactive Counterfire","Immediate Suppression","Proactive Counterfire",],
+                answer: "Reactive Counterfire"
+            },
+{type: "multiple-choice",
+                question: "248 What task/effect is to render a force incapable of achieving its objectives? ",
+                options: ["Defeat","Deceive","Delay","Destroy",],
+                answer: "Defeat"
+            },
+{type: "multiple-choice",
+                question: "249 What task/effect is when a force under pressure trades space for time by slowing down the enemy’s momentum and inflicting maximum damage on enemy forces without becoming decisively engaged?",
+                options: ["Suppress","Defeat","Deceive","Delay",],
+                answer: "Delay"
+            },
+{type: "multiple-choice",
+                question: "250 What task/effect is a tactical mission task that physically renders an enemy force combat-ineffective until it is reconstituted?",
+                options: ["Destroy","Defeat","Deceive","Neutralize",],
+                answer: "Destroy"
+            },
+{type: "multiple-choice",
+                question: "251 What task/effect is a tactical mission task in which a commander integrates direct and indirect fires, terrain, and obstacles to upset an enemy’s formation or tempo, interrupt the enemy’s timetable, or cause enemy forces to commit prematurely or attack in a piecemeal fashion?",
+                options: ["Divert","Disrupt","Defeat","Deceive",],
+                answer: "Disrupt"
+            },
+{type: "multiple-choice",
+                question: "252 What task/effect is the act of drawing the attention and forces of an enemy from the point of the principal operation; an attack, alarm, or feint that diverts attention?",
+                options: ["Diversion","Deceive","Defeat","Delay",],
+                answer: "Diversion"
+            },
+{type: "multiple-choice",
+                question: "253 What task/effect is a tactical mission task that results in rendering enemy personnel or materiel incapable of interfering with a particular operation?",
+                options: ["Delay","Neutralize","Disrupt","Suppress",],
+                answer: "Neutralize"
+            },
+{type: "multiple-choice",
+                question: "254 _____ is a brief, intense bombardment on selected targets or a prolonged effort over time covering a large number of targets.",
+                options: ["Suppression Fire","Offensive Fire","Destruction Fire","Preparation Fire",],
+                answer: "Preparation Fire"
+            },
+{type: "multiple-choice",
+                question: "255 What task/effect is a tactical mission task that results in temporary degradation of the performance of a force or weapons system below the level needed to accomplish the mission?",
+                options: ["Neutralize","Delay","Disrupt","Suppress",],
+                answer: "Suppress"
+            },
+{type: "multiple-choice",
+                question: "256 Field artillery contributes to unified land operations by _____ in space and time on single or multiple targets with precision, near-precision, and area fire capabilities.",
+                options: ["Massing Fire","Placing Indirect Fire","Denying Enemy","Converging Fires",],
+                answer: "Massing Fire"
+            },
+{type: "multiple-choice",
+                question: "257 _____ is the act of designing a force, support staff, or sustainment package of specific size and composition to meet a unique task or mission.",
+                options: ["Retrograde","Task-Organizing","Coordinating Fires","Mission-Organizing",],
+                answer: "Task-Organizing"
+            },
+{type: "multiple-choice",
+                question: "258 What command relationship means to be assigned to and forming an essential part of a military organization as listed in its table of organization for the Army, Air Force, and Marine Corps, and are assigned to the operating forces for the Navy?",
+                options: ["Assign","Task Organized","Operational","Organic",],
+                answer: "Organic"
+            },
+{type: "multiple-choice",
+                question: "259 What command relationship means to place units or personnel in an organization where such placement is relatively permanent, and/or where such organization controls and administers the units or personnel for the primary function, or greater portion of the functions, of the unit or personnel?",
+                options: ["Assign","Organic","Attach","Task",],
+                answer: "Assign"
+            },
+{type: "multiple-choice",
+                question: "260 What command relationship is the authority to perform those functions of command over subordinate forces involving organizing and employing commands and forces, assigning tasks, designating objectives, and giving authoritative direction necessary to accomplish the mission?",
+                options: ["Tactical Control","Operational Control","Organizational Control","Positive Control",],
+                answer: "Operational Control"
+            },
+{type: "multiple-choice",
+                question: "261 What command relationship is the authority over forces that is limited to the detailed direction and control of movements or maneuvers within the operational area necessary to accomplish missions or tasks assigned?",
+                options: ["Positive Control","Operational Control","Organizational Control","Tactical Control",],
+                answer: "Tactical Control"
+            },
+{type: "multiple-choice",
+                question: "262 Which support relationship is a relationship requiring a force to support another specific force and authorizing it to answer directly to the supported force’s request for assistance?",
+                options: ["General Support","Operational Support","Reinforcing","Direct Support",],
+                answer: "Direct Support"
+            },
+{type: "multiple-choice",
+                question: "263 Which support relationship is a relationship requiring a force to support another supporting unit?",
+                options: ["General Support-Reinforcing","Reinforcing","Indirect Support","General Support",],
+                answer: "Reinforcing"
+            },
+{type: "multiple-choice",
+                question: "264 Which support relationship is support which is given to the supported force as a whole and not to any particular subdivision thereof?",
+                options: ["General Support","General Support-Reinforcing","Direct Support","Close Support",],
+                answer: "General Support"
+            },
+{type: "multiple-choice",
+                question: "265 Which support relationship is a relationship assigned to a unit to support the force as a whole and to reinforce another similar-type unit?",
+                options: ["General Support","General Support-Reinforcing","Direct Support","Close Support",],
+                answer: "General Support-Reinforcing"
+            },
+{type: "multiple-choice",
+                question: "266 A _____ is a munition that corrects for ballistic conditions using guidance and control up to the aimpoint or submunitions dispense with terminal accuracy less than the lethal radius of effects.",
+                options: ["Heat Seeker","Cluster Munition","Precision Munition","Joint Fire Unit",],
+                answer: "Precision Munition"
+            },
+{type: "multiple-choice",
+                question: "267 The goal of any indirect firing unit is to achieve accurate _____ on a target. ",
+                options: ["Accurate and Sufficient Fires","Lasting Operational Effects","First-Round Fire for Effect","Fires that Support the Scheme of Maneuver",],
+                answer: "First-Round Fire for Effect"
+            },
+{type: "multiple-choice",
+                question: "268 What is NOT a method for responsive fires?",
+                options: ["Rehearsals","Planning Fire Support Requirements in Advance","Streamlining the Call for Fire by Shortening the Number of Transmissions","Continually Training Observers in all Aspects of Fire Support",],
+                answer: "Streamlining the Call for Fire by Shortening the Number of Transmissions"
+            },
+{type: "multiple-choice",
+                question: "269 A _____ is an operation to defeat an enemy attack, gain time, economize forces, and develop conditions favorable for offensive or stability operations.",
+                options: ["Defensive Operation","Offensive Operation","Concept of Fires","Scheme of Maneuver ",],
+                answer: "Defensive Operation"
+            },
+{type: "multiple-choice",
+                question: "270 What is a type of defensive operation that concentrates on denying enemy forces access to designated terrain for a specific time rather than destroying the enemy outright?",
+                options: ["Terrain Denial","Specified Defense","Terrain Defense","Area Defense",],
+                answer: "Area Defense"
+            },
+{type: "multiple-choice",
+                question: "271 What is a defensive operation that concentrates on the destruction or defeat of the enemy through a decisive attack by a striking force?",
+                options: ["Area Defense","Deception Defense","Mobile Defense","Mobile Strike",],
+                answer: "Mobile Defense"
+            },
+{type: "multiple-choice",
+                question: "272 What is a type of defensive operation that involves organized movement away from the enemy?",
+                options: ["Retrograde","Retreat","Recession","Reconnoiter",],
+                answer: "Retrograde"
+            },
+{type: "multiple-choice",
+                question: "273 What is a type of offensive operation designed to develop the situation and establish or regain contact?",
+                options: ["Preparation Fires","Deliberate Contact","Movement to Contact","Scheme of Maneuver",],
+                answer: "Movement to Contact"
+            },
+{type: "multiple-choice",
+                question: "274 What is a type of offensive operation that destroys or defeats enemy forces, seizes and secures terrain, or both?",
+                options: ["Movement to Contact","Exploitation","Attack","Deliberate Attack",],
+                answer: "Attack"
+            },
+{type: "multiple-choice",
+                question: "275 What is a type of offensive operation that usually follows a successful attack and is designed to disorganize the enemy in depth?",
+                options: ["Deep Fires","Attack","Disruption","Exploitation",],
+                answer: "Exploitation"
+            },
+{type: "multiple-choice",
+                question: "276 What is a type of offensive operation designed to catch or cut off a hostile force attempting to escape, with the aim of destroying it?",
+                options: ["Exploitation","Neutralize","Movement to Contact","Pursuit",],
+                answer: "Pursuit"
+            },
+{type: "multiple-choice",
+                question: "277 What type of operation orients on the force or facility being protected?",
+                options: ["Passage of Lines","Security Operations","Signaling Operations","Force Protection",],
+                answer: "Security Operations"
+            },
+{type: "multiple-choice",
+                question: "278 What is an operation in which a force moves forward or rearward through another force’s combat positions with the intention of moving into or out of contact with the enemy?",
+                options: ["Forward Passage of Lines","Movement to Contact","Position Exploitation","Passage of Lines",],
+                answer: "Passage of Lines"
+            },
+{type: "multiple-choice",
+                question: "279 What is a synchronized combined arms activity under the control of the maneuver commander conducted to allow maneuver through an obstacle?",
+                options: ["Breach","Clear","Attack","Offense",],
+                answer: "Breach"
+            },
+{type: "multiple-choice",
+                question: "280 A _____ is a criterion used to assess friendly actions that is tied to measuring task accomplishment.",
+                options: ["Collateral Damage Estimate","Measure of Performance","Effects Assessment","Measure of Effectiveness",],
+                answer: "Measure of Performance"
+            },
+{type: "multiple-choice",
+                question: "281 A _____ is a criterion used to assess changes in system behavior, capability, or operational environment that is tied to measuring the attainment of an end state, achievement of an objective, or creation of an effect.",
+                options: ["Assessment","Measure of Effectiveness","Measure of Performance","Patterns of Life",],
+                answer: "Measure of Effectiveness"
+            },
+{type: "multiple-choice",
+                question: "282 Permissive fire support coordination measures _____ the attack of targets. Fires must be cleared with both terrain owners and other airspace users.",
+                options: ["Restrictive","Redundant","Increase","Facilitate",],
+                answer: "Facilitate"
+            },
+{type: "multiple-choice",
+                question: "283 A _____ is a line beyond which conventional surface-to-surface direct fire and indirect fire support means may fire at any time within the boundaries of the establishing HQ without additional coordination but does not eliminate the responsibility to coordinate the airspace required to conduct the mission. ",
+                options: ["Fire Support Coordination Line","Coordinated Fire Line","Restrictive Fire Line","Boundary",],
+                answer: "Coordinated Fire Line"
+            },
+{type: "multiple-choice",
+                question: "284 A _____ is a fire support coordination measure established by the land or amphibious force commander to support common objectives within an area of operation, beyond which all fires must be coordinated with affected commanders prior to engagement, and short of the line, all fires must be coordinated with the establishing commander prior to engagement.",
+                options: ["Coordinated Fire Line","Free Fire Area","Fire Support Coordination Line","Phase Line",],
+                answer: "Fire Support Coordination Line"
+            },
+{type: "multiple-choice",
+                question: "285 A _____ is a specific region into which any weapon system may fire without additional coordination with the establishing HQ.",
+                options: ["Restrictive Fire Area","Coordinated Fire Area","Coordinated Fire Line","Free Fire Area",],
+                answer: "Free Fire Area"
+            },
+{type: "multiple-choice",
+                question: "286 A _____ is a three-dimensional permissive fire support coordination measure with an associated airspace coordinating measure used to facilitate the integration of fires. A _____ facilitates the expeditious air-to-surface lethal attack of targets.",
+                options: ["Kill Box","Airspace Coordination Area","Free Fire Area","No Fire Area",],
+                answer: "Kill Box"
+            },
+{type: "multiple-choice",
+                question: "287 Restrictive fire support coordination measures are those that provide safeguards for friendly forces and noncombatants, facilities, or terrain.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "288 A _____ is an area designated by the appropriate commander into which fires or their effects are prohibited.",
+                options: ["No Fire Area","Free Fire Area","Restrictive Fire Area","Impact Area",],
+                answer: "No Fire Area"
+            },
+{type: "multiple-choice",
+                question: "289 A _____ is a location in which specific restrictions are imposed and into which fires that exceed those restrictions will not be delivered without coordination with the establishing HQ.",
+                options: ["Restricted Area","No Fire Area","Restrictive Fire Area","Restrictive Firing Line",],
+                answer: "Restricted Area"
+            },
+{type: "multiple-choice",
+                question: "290 A _____ is a specific boundary established between converging, friendly surface forces that prohibits fires or their effects from crossing.",
+                options: ["Restrictive Fire Line","Coordinated Fire Line","Phase Line","Boundary",],
+                answer: "Restrictive Fire Line"
+            },
+{type: "multiple-choice",
+                question: "291 A _____ is a line that delineates surface areas for the purpose of facilitating coordination and deconfliction of operations between adjacent units, formations, or areas (JP 3-0). _____(ies)(s) divide up areas of operation and define responsibility for clearance of fires. _____(ies)(s) are both permissive and restrictive in nature.",
+                options: ["Coordinated fire line","Phase line","Fire support coordination line","Boundary",],
+                answer: "Boundary"
+            },
+{type: "multiple-choice",
+                question: "292 A _____ is an area assigned to an artillery unit where individual artillery systems can maneuver to increase their survivability.",
+                options: ["Free Fire Area","Position Area for Artillery","Firing Point","Firing Area",],
+                answer: "Position Area for Artillery"
+            },
+{type: "multiple-choice",
+                question: "293 Which radar zone is an area of coverage by weapons locating radar which the maneuver commander designates as critical to the protection of an asset whose loss would seriously jeopardize the mission?",
+                options: ["Critical Friendly Zone","Censor Zone","Artillery Target Intelligence Zone","Call for Fire Zone",],
+                answer: "Critical Friendly Zone"
+            },
+{type: "multiple-choice",
+                question: "294 Which radar zone is a weapons locating radar search area from which the commander wants to attack hostile firing systems?",
+                options: ["Critical Friendly Zone ","Censor Zone","Artillery Target Intelligence Zone","Call for Fire Zone",],
+                answer: "Call for Fire Zone"
+            },
+{type: "multiple-choice",
+                question: "295 Which radar zone is a weapons locating radar search area in enemy territory that the commander monitors closely to detect and report any weapon ahead of all acquisitions other than those from critical friendly zones or call for fire zones?",
+                options: ["Critical Friendly Zone ","Censor Zone","Artillery Target Intelligence Zone","Call for Fire Zone",],
+                answer: "Artillery Target Intelligence Zone"
+            },
+{type: "multiple-choice",
+                question: "296 Which radar zone is an area from which radar is prohibited from reporting acquisitions and that is normally placed around friendly weapon systems to prevent them from being acquired by friendly radars?",
+                options: ["Artillery Target Intelligence Zone","Call for Fire Zone","Critical Friendly Zone","Censor Zone",],
+                answer: "Censor Zone"
+            },
+{type: "multiple-choice",
+                question: "297 Who is responsible for all aspects of joint fires planning, prioritization, coordination, execution, and assessment?",
+                options: ["Joint Fire Support Officer","Joint Force Commander","Combined Forces Air Component Commander","Deputy Combined Forces Air Component Commander",],
+                answer: "Joint Force Commander"
+            },
+{type: "multiple-choice",
+                question: "298 What is a list of objects or entities characterized as protected from the effects of military operations under international law and/or rules of engagement (ROE)?",
+                options: ["No-Strike List","Restricted Target List","Fire Support Coordination Measures","Collateral Damage Estimate",],
+                answer: "No-Strike List"
+            },
+{type: "multiple-choice",
+                question: "299 What is a list of valid military targets that could be on the joint integrated prioritized target list (JIPTL) that have restrictions placed upon their engagement by the JFC or directed by higher authorities?",
+                options: ["No-Strike List","Restricted Target List","High Payoff Target List","High Value Target List",],
+                answer: "Restricted Target List"
+            },
+{type: "multiple-choice",
+                question: "300 What is the senior Marine air-ground task force (MAGTF) fire support organization and assists the MAGTF commander in planning, coordination, execution, and assessment of MAGTF fires and effects?",
+                options: ["Fire Support Element (FSE)","Fires Element (FE)","Fires Cell (FC)","Fires and Effects Coordination Center (FECC)",],
+                answer: "Fires and Effects Coordination Center (FECC)"
+            },
+{type: "multiple-choice",
+                question: "301 The joint targeting cycle consists of how many phases?",
+                options: ["3","5","6","4",],
+                answer: "6"
+            },
+{type: "multiple-choice",
+                question: "302 What provides the process to prioritize targets, determine the appropriate fires and which components will mission-plan and synchronize the execution of those fires, and determine whether the resulting effects are sufficient to support the Joint Force Commander’s objectives? ",
+                options: ["Targeting","Planning","MDMP","COA Development",],
+                answer: "Targeting"
+            },
+{type: "multiple-choice",
+                question: "303 What facilitates efficient use of airspace to accomplish air operations and fires and simultaneously provide safeguards for friendly forces?",
+                options: ["FSCMs","MCMs","NSLs","ACMs",],
+                answer: "ACMs"
+            },
+{type: "multiple-choice",
+                question: " 304 What is characterizing detected objects in the operational environment to support engagement decisions?",
+                options: ["Positive Identification","Combat Identification","Friendly Force Tracking","Target Identification",],
+                answer: "Combat Identification"
+            },
+{type: "multiple-choice",
+                question: "305 What is an identification derived from observation and analysis of target characteristics, including visual recognition; electronic warfare support (ES) systems; non-cooperative target recognition techniques; identification, friend or foe systems; other physics-based identification techniques; or human identity-based biometric data collection devices?",
+                options: ["Positive Identification","Combat Identification","Friendly Force Tracking","Target Identification",],
+                answer: "Positive Identification"
+            },
+{type: "multiple-choice",
+                question: "306 What is the process of fixing, observing, and reporting the location and movement of friendly forces?",
+                options: ["Positive Identification","Combat Identification","Friendly Force Tracking","Target Identification",],
+                answer: "Friendly Force Tracking"
+            },
+{type: "multiple-choice",
+                question: "307 What branch is a Battlefield Coordination Line specific to?",
+                options: ["Army","Navy","Air Force","Marine Corps",],
+                answer: "Marine Corps"
+            },
+{type: "multiple-choice",
+                question: "308 What measures do land, maritime, and amphibious commanders use to define lines of responsibility in support of movement and maneuver of friendly forces?",
+                options: ["FSCMs","MCMs","NSLs","ACMs",],
+                answer: "MCMs"
+            },
+{type: "multiple-choice",
+                question: "309 What is a maneuver control measure used by land forces for control and coordination of military operations?",
+                options: ["Phase Line","Fire Support Area","Boundary","Fire Support Station",],
+                answer: "Phase Line"
+            },
+{type: "multiple-choice",
+                question: "310 What maneuver control measure is an appropriate maneuver area assigned by the maritime commander to fire support ships, from which they deliver surface joint fire support to an operation ashore?",
+                options: ["Phase Line","Fire Support Area","Boundary","Fire Support Station",],
+                answer: "Fire Support Area"
+            },
+{type: "multiple-choice",
+                question: "311 What is an exact location at sea from which a fire support ship delivers fires?",
+                options: ["Phase Line","Fire Support Area","Boundary","Fire Support Station",],
+                answer: "Fire Support Station"
+            },
+{type: "multiple-choice",
+                question: "312 What is CAS augmented by machine-to-machine exchange of situational awareness (SA) and targeting messages that can include CAS briefs; friendly, threat, and target locations; battle damage assessment (BDA);clearance of fires; and command and control (C2)?",
+                options: ["DACAS","TGO","ECAS","XCAS",],
+                answer: "DACAS"
+            },
+{type: "multiple-choice",
+                question: "313 Which entity within the Theater Air Control System (TACS) allocates resources and tasks forces through the air tasking order (ATO)?",
+                options: ["Wing Operations Center (WOC)","Control and Reporting Center (CRC)","Air Operations Center (AOC)","Air Support Operations Center (ASOC)",],
+                answer: "Wing Operations Center (WOC)"
+            },
+{type: "multiple-choice",
+                question: "314 Which entity within the Theater Air Control System (TACS) processes include handling immediate air support requests, coordinating the execution of scheduled and on-call CAS sorties, and coordinating manned/unmanned aircraft transiting through the assigned airspace?",
+                options: ["Wing Operations Center (WOC)","Control and Reporting Center (CRC)","Air Operations Center (AOC)","Air Support Operations Center (ASOC)",],
+                answer: "Air Support Operations Center (ASOC)"
+            },
+{type: "multiple-choice",
+                question: "315 Which entity within the Army Air-Ground System (AAGS) is an Army liaison provided by the Army component or force commander to the COMAFFOR for duties with the air operations center (AOC) or to the joint force air component commander (JFACC) for duties in the joint air operations center (JAOC) based on the scenario?",
+                options: ["Fire Support Team (FIST)","Battlefield Coordination Detachment (BCD)","Army Aviation Liaison","Airspace Elements",],
+                answer: "Battlefield Coordination Detachment (BCD)"
+            },
+{type: "multiple-choice",
+                question: "316 Which entity within the Marine Corps Command and Control System (MACCS) is the  senior agency?",
+                options: ["Navy Tactical Air Control Center (TACC)","Aviation Combat Element (ACE)","Marine Tactical Air Control Center (TACC)","Tactical Air Operations Center (TAOC)",],
+                answer: "Marine Tactical Air Control Center (TACC)"
+            },
+{type: "multiple-choice",
+                question: "317 Which entity within the Special Operations Air-Ground System (SOAGS) is typically located with the joint fires element at the joint special operations task force (JSOTF)?",
+                options: ["Joint Air Coordination Element (JACE)","Special Operations Liaison Element (SOLE)","Special Operations C2 Element","Joint Terminal Attack Controller (JTAC)",],
+                answer: "Joint Air Coordination Element (JACE)"
+            },
+{type: "multiple-choice",
+                question: "318 What is the link between the air support operations center (ASOC) and subordinate tactical air control parties (TACP) for aircraft coordination and sending immediate air support requests?",
+                options: ["Tactical Air Direction (TAD) Net","Joint Air Request Net (JARN)","Air Control Net","Guard Net",],
+                answer: "Joint Air Request Net (JARN)"
+            },
+{type: "multiple-choice",
+                question: "319 What net provides a means for the control of aircraft?",
+                options: ["Tactical Air Direction (TAD) Net","Joint Air Request Net (JARN)","Air Control Net","Guard Net",],
+                answer: "Tactical Air Direction (TAD) Net"
+            },
+{type: "multiple-choice",
+                question: "320 What term is used by a joint terminal attack controller (JTAC)/forward air controller (airborne) (FAC(A)) during a Type 1 and 2 control when granting weapons release clearance to an aircraft attacking a specific target?",
+                options: ["Abort","Cleared to Engage","Cleared Hot","Continue",],
+                answer: "Cleared Hot"
+            },
+{type: "multiple-choice",
+                question: "321 What term is used by a joint terminal attack controller (JTAC)/forward air controller (airborne) (FAC(A)) during all types of control to authorize the aircraft to proceed with the attack profile, but weapons release is not granted yet?",
+                options: ["Abort","Cleared to Engage","Cleared Hot","Continue",],
+                answer: "Continue"
+            },
+{type: "multiple-choice",
+                question: "322 What term is used by a joint terminal attack controller (JTAC)/forward air controller (airborne) (FAC(A)) during Type 3 control granting weapons release clearance to an aircraft or flight to attack a target or targets within the parameters prescribed by the JTAC/FAC(A)?",
+                options: ["Abort","Cleared to Engage","Cleared Hot","Continue",],
+                answer: "Cleared to Engage"
+            },
+{type: "multiple-choice",
+                question: "323 What are the two methods of attack for close air support (CAS)?",
+                options: ["Bomb on Target (BOT) and Bomb on Coordinate (BOC)","Bomb on Time (BOT) and Bomb on Coordinate (BOC)","Bomb on Target (BOT) and Bomb on Correlation (BOC)","Bomb on Threat (BOT) and Bomb on Coordinate (BOC)",],
+                answer: "Bomb on Target (BOT) and Bomb on Coordinate (BOC)"
+            },
+{type: "multiple-choice",
+                question: "324 When will the joint terminal attack controller (JTAC)/forward air controller (airborne) (FAC(A)) state the method of attack?",
+                options: ["In the remarks and restrictions.","In the game plan prior to the CAS brief.","In the situation update.","In the correlation phase of CAS execution.",],
+                answer: "In the game plan prior to the CAS brief."
+            },
+{type: "multiple-choice",
+                question: "325 Which method of attack requires that the joint terminal attack controller’s (JTAC)/forward air controller (airborne)’s (FAC(A)) intended target or mark is tally/contact/captured by the aircrew?",
+                options: ["Bomb on Time (BOT)","Bomb on Target (BOT)","Bomb on Correlation (BOC)","Bomb on Coordinate (BOC)",],
+                answer: "Bomb on Target (BOT)"
+            },
+{type: "multiple-choice",
+                question: "326 Which rotary-wing movement technique is used when enemy contact is remote?",
+                options: ["Bounding Overwatch","Traveling Overwatch","Traveling","None of the Above",],
+                answer: "Traveling"
+            },
+{type: "multiple-choice",
+                question: "327 Which rotary-wing movement technique is used when enemy contact is possible?",
+                options: ["Bounding Overwatch","Traveling Overwatch","Traveling","None of the Above",],
+                answer: "Traveling Overwatch"
+            },
+{type: "multiple-choice",
+                question: "328 Which rotary-wing movement technique is used when enemy contact is imminent?",
+                options: ["Bounding Overwatch","Traveling Overwatch","Traveling","None of the Above",],
+                answer: "Bounding Overwatch"
+            },
+{type: "multiple-choice",
+                question: "329 Which rotary-wing attack tactic is performed when the aircraft is stationary or has little forward motion?",
+                options: ["Hovering Fire","Running Fire","Diving Fire","None of the Above",],
+                answer: "Hovering Fire"
+            },
+{type: "multiple-choice",
+                question: "330 Which rotary-wing attack tactic is performed when the aircraft is level, forward flight?",
+                options: ["Hovering Fire","Running Fire","Diving Fire","None of the Above",],
+                answer: "Running Fire"
+            },
+{type: "multiple-choice",
+                question: "331 Which rotary-wing attack tactic is delivered while the aircraft is at altitude and in descending forward flight?",
+                options: ["Hovering Fire","Running Fire","Diving Fire","None of the Above",],
+                answer: "Diving Fire"
+            },
+{type: "multiple-choice",
+                question: "332 For successful JFO employment, it is imperative the JTAC and JFO participate in the planning process.",
+                options: ["True","False",],
+                answer: "True"
+            },
+{type: "multiple-choice",
+                question: "333 What additional line of the CAS 9-line is a mandatory readback when working with NATO forces?",
+                options: ["Line 7","Line 8","Line 9","Line 5",],
+                answer: "Line 8"
+            },
+{type: "multiple-choice",
+                question: "334 Which of the following is NOT a remark but a restriction in the CAS brief?",
+                options: ["LTL","PTL","ACAs","Surface-to-Air Threat",],
+                answer: "ACAs"
+            },
+{type: "multiple-choice",
+                question: "335 JTACs/FAC(A)s should respond to readbacks of a CAS brief with just “readback correct” or “good readback”.",
+                options: ["True","False",],
+                answer: "False"
+            },
+{type: "multiple-choice",
+                question: "336 Which aircraft sensor posture is when the lead aircraft’s responsibility is the friendly force, and the wing aircraft is primarily responsible for scanning the objective (or assigned checkpoint) and back to the friendly force?",
+                options: ["Neutral","Offensive","Defensive","None of the Above",],
+                answer: "Neutral"
+            },
+{type: "multiple-choice",
+                question: "337 Which aircraft sensor posture is when both the lead and wing aircraft concentrates on the objective?",
+                options: ["Neutral","Offensive","Defensive","None of the Above",],
+                answer: "Offensive"
+            },
+{type: "multiple-choice",
+                question: "338 Which aircraft sensor posture is when the lead aircraft’s responsibility is the friendly force, and the wing aircraft is responsible for sanitizing the route directly in front of the friendly force?",
+                options: ["Neutral","Offensive","Defensive","None of the Above",],
+                answer: "Defensive"
+            },
+         
+        ];
+
+        let selectedQuestions = [];
+        let score = 0;
+        let userAnswers = [];
+        let currentIndex = 0;
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            // Shuffle and select the first 50 questions
+            selectedQuestions = shuffle(questions).slice(0, 50);
+            userAnswers = new Array(selectedQuestions.length).fill(null); // Initialize user answers array with null
+            showQuestion(currentIndex);
+            updateProgress();
+        }
+
+        function showQuestion(index) {
+            if (index < 0 || index >= selectedQuestions.length) {
+                return;
+            }
+
+            currentIndex = index;
+
+            let questionDiv = document.getElementById("question");
+            questionDiv.innerHTML = `<h3>${selectedQuestions[index].question}</h3>`;
+
+            if (selectedQuestions[index].type === "multiple-choice") {
+                selectedQuestions[index].options.forEach(option => {
+                    let button = document.createElement("button");
+                    button.innerHTML = option;
+
+                    // Highlight the selected answer if it matches the previously chosen one
+                    if (userAnswers[index] && userAnswers[index].userAnswer === option) {
+                        button.classList.add("selected-answer");
+                    }
+
+                    button.onclick = function () {
+                        let isCorrect = option === selectedQuestions[index].answer;
+                        if (isCorrect) {
+                            score++;
+                        }
+                        userAnswers[index] = {
+                            question: selectedQuestions[index].question,
+                            correctAnswer: selectedQuestions[index].answer,
+                            userAnswer: option,
+                            correct: isCorrect
+                        };
+                        updateProgress();
+                        showQuestion(index + 1);
+                    };
+                    questionDiv.appendChild(button);
+                });
+            } else if (selectedQuestions[index].type === "fill-in-the-blank") {
+                let input = document.createElement("input");
+                input.type = "text";
+                input.value = userAnswers[index] ? userAnswers[index].userAnswer : "";
+
+                input.onblur = function () {
+                    let isCorrect = input.value.trim() === selectedQuestions[index].answer;
+                    if (isCorrect) {
+                        score++;
+                    }
+                    userAnswers[index] = {
+                        question: selectedQuestions[index].question,
+                        correctAnswer: selectedQuestions[index].answer,
+                        userAnswer: input.value.trim(),
+                        correct: isCorrect
+                    };
+                    updateProgress();
+                };
+                questionDiv.appendChild(input);
+            } else if (selectedQuestions[index].type === "select-multiple") {
+                selectedQuestions[index].options.forEach(option => {
+                    let label = document.createElement("label");
+                    let checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.value = option;
+
+                    if (userAnswers[index] && userAnswers[index].userAnswer.includes(option)) {
+                        checkbox.checked = true;
+                    }
+
+                    checkbox.onchange = function () {
+                        let selectedOptions = userAnswers[index]
+                            ? userAnswers[index].userAnswer.slice()
+                            : [];
+                        if (checkbox.checked) {
+                            selectedOptions.push(option);
+                        } else {
+                            selectedOptions = selectedOptions.filter(opt => opt !== option);
+                        }
+
+                        let isCorrect =
+                            selectedOptions.sort().toString() ===
+                            selectedQuestions[index].answer.sort().toString();
+
+                        if (isCorrect) {
+                            score++;
+                        }
+
+                        userAnswers[index] = {
+                            question: selectedQuestions[index].question,
+                            correctAnswer: selectedQuestions[index].answer,
+                            userAnswer: selectedOptions,
+                            correct: isCorrect
+                        };
+                        updateProgress();
+                    };
+
+                    label.appendChild(checkbox);
+                    label.appendChild(document.createTextNode(option));
+                    questionDiv.appendChild(label);
+                });
+            }
+
+            // Update button states
+            document.getElementById("prevBtn").disabled = index === 0;
+            document.getElementById("nextBtn").disabled = index >= selectedQuestions.length - 1;
+        }
+
+        function navigate(direction) {
+            if (currentIndex + direction >= 0 && currentIndex + direction < selectedQuestions.length) {
+                showQuestion(currentIndex + direction);
+            }
+        }
+
+        function updateProgress() {
+            let progressDiv = document.getElementById("progress");
+            let completedQuestions = userAnswers.filter(answer => answer !== null).length;
+            progressDiv.innerHTML = `Total Questions Answered: ${completedQuestions}/${selectedQuestions.length}`;
+
+            // Check if all questions have been answered
+            if (completedQuestions === selectedQuestions.length) {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            let resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = `<h3>Your final score: ${score}/${selectedQuestions.length}</h3>`;
+
+            userAnswers.forEach(answer => {
+                let result = document.createElement("div");
+                result.className = "question-summary";
+                result.innerHTML = `
+                    <p><strong>Question:</strong> ${answer.question}</p>
+                    <p><strong>Your Answer:</strong> ${Array.isArray(answer.userAnswer) ? answer.userAnswer.join(", ") : answer.userAnswer} ${answer.correct ? '<span class="correct">✔</span>' : '<span class="incorrect">✘</span>'}</p>
+                    <p><strong>Correct Answer:</strong> ${Array.isArray(answer.correctAnswer) ? answer.correctAnswer.join(", ") : answer.correctAnswer}</p>
+                `;
+                resultDiv.appendChild(result);
+            });
+        }
+
+        // Start the quiz when the page loads
+        startQuiz();
+    </script>
+
+</body>
+</html>
